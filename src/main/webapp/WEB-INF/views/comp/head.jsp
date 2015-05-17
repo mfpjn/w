@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/js/outdatedbrowser/outdatedbrowser.min.css" />
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/jquery.fancybox.css?v=2.1.5"
+	href="/resources/${pageContext.request.contextPath}css/jquery.fancybox.css?v=2.1.5"
 	media="screen" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/normalize.css" />
@@ -21,9 +21,7 @@
 	href="${pageContext.request.contextPath}/resources/libs/bootstrap-tagsinput/bootstrap-tagsinput.css" />
 
 <!-- Fonts -->
-<link
-	href='http://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700'
-	rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,600italic,400italic,300,700,700italic' rel='stylesheet' type='text/css'>
 
 <!-- Jquery -->
 <script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>

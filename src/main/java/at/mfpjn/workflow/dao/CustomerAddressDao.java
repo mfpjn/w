@@ -15,4 +15,8 @@ public interface CustomerAddressDao {
 
 	void updateCustomerAddress(CustomerAddress customerAddress);
 
+	void insertCustomerAddress(CustomerAddress customerAddress);
+	
+	CustomerAddress getCustomerAddressByCustomerId(int id);
+
 }

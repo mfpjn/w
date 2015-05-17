@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -29,7 +30,13 @@ public class Customer {
 	@Column(name="Title")
 	private String title;
 	
-	@Column(name="DOB")
+	
+	//@DateTimeFormat(pattern="yyyy/MM/dd")
+	@Pattern(regexp = "^\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}$", message = "Invalid date of birth!")
+	@NotNull(message="Date of birth can not be blank!")
+	//@Temporal(TemporalType.DATE)
+	//@Pattern(regexp = "^\\d{4}[-/.]\\d{1,2}[-/.]\\d{1,2}$",message ="Wrong!")
+	@Column(name="DOB") //date of birth
 	private String dob;
 
 	@Column(name="Email")
@@ -50,21 +57,21 @@ public class Customer {
 	@Column(name="PictureLink")
 	private String pictureLink;
 	
-	@Column(name="Admin")
+	@Column(name="Admin", columnDefinition = "TINYINT(1)")
 	private Boolean admin;
 	
 	@Column(name="HonorPoints")
 	private int honorPoints;
 	
 	@Column(name="Phone")
-	@Size(min=10, message="Size ")
-	@NotBlank(message="Phone number can not be blank!")
+//	@Size(min=10, message="Size ")
+//	@NotBlank(message="Phone number can not be blank!")
 	private String phone;
 	
-	@Column(name="NewsLetter")
+	@Column(name="NewsLetter", columnDefinition = "TINYINT(1)")
 	private Boolean newsletter;
 	
-	@Column(name="enabled")
+	@Column(name="enabled", columnDefinition = "TINYINT(1)")
 	private Boolean enabled;
 
 	public Customer()
@@ -126,14 +133,17 @@ public class Customer {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
 
 	public String getDob() {
 		return dob;
 	}
 
+
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
+
 
 	public String getEmail() {
 		return email;

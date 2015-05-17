@@ -33,4 +33,7 @@ public class StateDaoImpl implements StateDao{
 				.setParameter("id", id).uniqueResult();
 	}
 	
+	public State getStateByName(String name){
+		return (State)session().createQuery("from State where name = :name").setParameter("name", name).uniqueResult();				
+	}
 }

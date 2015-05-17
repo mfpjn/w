@@ -31,10 +31,6 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	}
 
-	public List<Customer> getCustomer() {
-		return session().createQuery("from Customer").list();
-	}
-
 	public Customer getCustomer(int id) {
 		return (Customer) session().createQuery("from Customer where id = :id")
 				.setParameter("id", id).uniqueResult();

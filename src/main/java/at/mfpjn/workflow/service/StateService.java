@@ -20,4 +20,8 @@ public class StateService {
 	public State getState(int stateId) {
 		return stateDao.getState(stateId);
 	}
+	
+	public State getStateByName(String name){
+		return stateDao.getStateByName(name);
+	}
 }

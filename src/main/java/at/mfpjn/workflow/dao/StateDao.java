@@ -10,5 +10,7 @@ public interface StateDao {
 List<State> getStates();
 	
 	State getState(int Id);
+	
+	State getStateByName(String name);
 
 }

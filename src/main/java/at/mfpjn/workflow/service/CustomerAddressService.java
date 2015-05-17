@@ -25,7 +25,15 @@ public class CustomerAddressService {
 		return customerAddressDao.getCustomerAddressPerCustomer(customerId);
 	}
 	
+	public void insertCustomerAddress(CustomerAddress customerAddress){
+		customerAddressDao.insertCustomerAddress(customerAddress);
+	}
+	
 	public void updateCustomerAddress(CustomerAddress customerAddress){
 		customerAddressDao.updateCustomerAddress(customerAddress);
+	}
+	
+	public CustomerAddress getCustomerAddressByCustomerId(int id){
+		return customerAddressDao.getCustomerAddressByCustomerId(id);
 	}
 }

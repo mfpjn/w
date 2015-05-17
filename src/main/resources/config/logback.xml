@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <!-- To enable JMX Management -->
+    <jmxConfigurator/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%.-1level|%-40.40logger{0}|%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="at.andatu.andatu" level="debug" />
+    <logger name="org.springframework" level="info" />
+    <logger name="org.apache.catalina.startup.ContextConfig" level="info" />
+    <logger name="org.apache.catalina.core.ApplicationContext" level="info" />
+    <logger name="org.apache.catalina.core.StandardService" level="info" />
+    <logger name="org.apache.catalina.core.StandardEngine" level="info" />
+    <logger name="org.apache.coyote.AbstractProtocol" level="info" />
+    <logger name="org.apache.catalina.startup.HostConfig" level="info" />
+    <logger name="org.apache.catalina.session.ManagerBase" level="info" />
+
+
+    <logger name="org.springframework.beans" level="info" />
+    <logger name="org.springframework.core" level="info" />
+    <logger name="org.springframework.context" level="info" />
+    <logger name="org.springframework.web" level="info" />
+
+    <root level="warn">
+        <appender-ref ref="console" />
+    </root>
+</configuration>

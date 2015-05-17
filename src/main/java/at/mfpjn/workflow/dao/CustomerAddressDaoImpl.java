@@ -40,8 +40,16 @@ public class CustomerAddressDaoImpl implements CustomerAddressDao{
 		.setParameter("customerId", customerId).list();
 	}
 	
+	public void insertCustomerAddress(CustomerAddress customerAddress) {
+		session().save(customerAddress);
+	}
+	
 	public void updateCustomerAddress(CustomerAddress customerAddress){
 		session().update(customerAddress);
+	}
+	
+	public CustomerAddress getCustomerAddressByCustomerId(int id){
+		return (CustomerAddress)session().createQuery("from CustomerAddress where customerFK.id = :customerId").setParameter("customerId", id).uniqueResult();
 	}
 	
 }

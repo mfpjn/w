@@ -18,7 +18,7 @@ $(document).ready(function() {
        Dropzone.options.dropzoneForm = {
 
               url : "upload", // not required if the <form> element has action attribute
-              autoProcessQueue : true,
+              autoProcessQueue : false,
               uploadMultiple : true,
               maxFilesize : 256, // MB
               parallelUploads : 3,

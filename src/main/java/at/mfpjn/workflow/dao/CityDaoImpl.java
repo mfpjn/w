@@ -38,4 +38,8 @@ public class CityDaoImpl implements CityDao{
 	public void updateCity(City city){
 		session().update(city);
 	}
+	
+	public City getCityByName(String city){
+		return (City)session().createQuery("from City where name = :city").setParameter("city", city).uniqueResult();
+	}
 }

@@ -24,4 +24,12 @@ public class CityService {
 	public void updateCity(City city) {
 		cityDao.updateCity(city);
 	}
+
+	public void insertCity(City city) {
+		cityDao.insertCity(city);
+	}
+	
+	public City getCityByName(String city){
+		return cityDao.getCityByName(city);
+	}
 }

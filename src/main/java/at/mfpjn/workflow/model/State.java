@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "STATE")
+@Table(name = "state")
 public class State implements Serializable {
 	@Id
 	@GeneratedValue
@@ -21,12 +21,5 @@ public class State implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return "State{" +
-				"id=" + id +
-				'}';
-	}
+	}	
 }

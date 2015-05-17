@@ -16,7 +16,7 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		  destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/workflow"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/andatu"></property>
 		<property name="username" value="root" />
 		<property name="password" value="" />
 	</bean>
@@ -39,17 +39,34 @@
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
+		<property name="port" value="587" />		
 		<property name="username" value="andatu7@gmail.com" />
 		<property name="password" value="andatuASE" />
 		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.transport.protocol">smtp</prop>
+			<props>				
 				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+ 				<prop key="mail.smtp.starttls.enable">true</prop>  
+<!-- 				<prop key="mail.smtp.connectiontimeout">60000</prop> -->
+<!-- 				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop> -->
 			</props>
 		</property>
 	</bean>
+	<bean id="templateMailMessage" class="org.springframework.mail.SimpleMailMessage">
+	<property name="from" value="andatu7@gmail.com" />
+	<property name="to" value="fujin6@gmail.com" />
+	<property name="subject" value="Welcome" />
+	<property name="text" >
+		<value>
+			<![CDATA[
+				Dear %s,
+				Mail Content : %s
+			]]>
+		</value>
+	</property>
+	
+	</bean>		
+			
 
 	<bean id="transactionManager"
 		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

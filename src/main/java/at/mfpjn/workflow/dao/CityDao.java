@@ -14,5 +14,7 @@ public interface CityDao {
 	void updateCity(City city);
 
 	void insertCity(City city);
+	
+	City getCityByName(String city);
 
 }
