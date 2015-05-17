@@ -7,12 +7,12 @@ public interface CustomerDao {
 
 
 	
-	public void InsertCustomer(Customer customer);
+	void InsertCustomer(Customer customer);
 	
-	public Customer getUser(String email);
+	Customer getUser(String email);
 
-	public Customer getCustomer(int Id);
+	Customer getCustomer(int Id);
 	
-	public void updateUser(Customer customer);
+	void updateUser(Customer customer);
 
 }

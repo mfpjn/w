@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="customer")
+@Table(name = "customer")
 public class Customer {
 	
 	@Id
@@ -59,5 +59,108 @@ public class Customer {
 	{
 	}
 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Boolean getHasFacebook() {
+		return hasFacebook;
+	}
+
+	public void setHasFacebook(Boolean hasFacebook) {
+		this.hasFacebook = hasFacebook;
+	}
+
+	public Boolean getHasInstagram() {
+		return hasInstagram;
+	}
+
+	public void setHasInstagram(Boolean hasInstagram) {
+		this.hasInstagram = hasInstagram;
+	}
+
+	public Boolean getHasTwitter() {
+		return hasTwitter;
+	}
+
+	public void setHasTwitter(Boolean hasTwitter) {
+		this.hasTwitter = hasTwitter;
+	}
+
+	public Boolean getHasGoogle() {
+		return hasGoogle;
+	}
+
+	public void setHasGoogle(Boolean hasGoogle) {
+		this.hasGoogle = hasGoogle;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", admin=" + admin +
+				", enabled=" + enabled +
+				", hasFacebook=" + hasFacebook +
+				", hasInstagram=" + hasInstagram +
+				", hasTwitter=" + hasTwitter +
+				", hasGoogle=" + hasGoogle +
+				'}';
+	}
 }
