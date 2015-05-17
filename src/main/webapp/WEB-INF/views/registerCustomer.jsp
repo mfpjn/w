@@ -18,21 +18,7 @@
 				<sf:input path="lastName" name="lastName" type="text" placeholder="Last Name"/>
 				<sf:errors class="form-error" path="lastName"></sf:errors>
 			</div>
-		 </div>
-		 <div class="row">
-			<div class="grid-70 marg-15 tece">
-				<select name="title">
-					<option class="custom-option" value="0" >Mr</option>
-					<option class="custom-option" value="1" >Ms</option>
-				</select>
-			</div>
-		 </div>
-		 <div class="row">
-			<div class="grid-70 marg-15 tece">
-				<sf:input path="dob" name="dob" type="text" placeholder="Date of birth yyyy/mm/dd"/>
-				<sf:errors class="form-error" path="dob"></sf:errors>
-			</div>
-		 </div>
+		 </div>		 		 
 		<div class="row">
 			<div class="grid-70 marg-15 tece">
 				<sf:input path="email" name="email" type="text" placeholder="E-Mail"/>
@@ -50,15 +36,7 @@
 			<div class="grid-70 marg-15 tece">
 			  <input name="confirmpassword" id="confirmpassword" type="password" placeholder="Confirm Password"/>
 			</div>
-		 </div>
-		 <div class="row">
-			 <div class="grid-70 marg-15 tece">
-				<select name="language">
-					<option class="custom-option" value="0" >English</option>
-					<option class="custom-option" value="1" >German</option>
-				</select>
-			 </div>
-		</div>
+		 </div>		 
 		<div class="row">
 			<div class="grid-70 marg-15 tece">
 		  		<button class="button-green" type="submit">Register</button>
