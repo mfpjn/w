@@ -38,19 +38,7 @@ public class CustomerController {
 	private MailSender mailSender;
 	
 	@Autowired
-	SendMail sendMail;
-	
-	@Autowired
-	StateService stateService;
-	
-	@Autowired
-	CustomerAddressService customerAddressService;
-	
-	@Autowired
-	CityService cityService;
-	
-	@Autowired
-	StateTranslationService stateTranslationService;
+	SendMail sendMail;		
 	
 	
 	@RequestMapping("/registerCustomer")
@@ -65,19 +53,7 @@ public class CustomerController {
 		UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String name = userDetails.getUsername();
 		Customer customer = customerService.getUser(name);
-		customer.setPassword("");
-		List<State> states = stateService.getStates();
-		List<StateTranslation> stateTranslations = stateTranslationService.getStates("en");
-		City city = new City();
-		CustomerAddress address = customerAddressService.getCustomerAddressByCustomerId(customer.getId());
-		if (address!=null) {
-			City temp = address.getCityFK();
-			city = cityService.getCity(temp.getId());
-			model.addAttribute("address",address);
-			model.addAttribute("city",city);
-		}
-		model.addAttribute("states", states);
-		model.addAttribute("stateTranslations", stateTranslations);
+		customer.setPassword("");							
 		model.addAttribute("customer", customer);
 		return "editCustomerInformation";
 	}
@@ -123,8 +99,7 @@ public class CustomerController {
 			return "editCustomerInformation";
 		} else {
 			try {
-				updateUserInfo(request);
-				updateAddress(request);
+				updateUserInfo(request);				
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.rejectValue("email", "DuplicateUsername.customer.email", "This email already exists!");
@@ -159,52 +134,7 @@ public class CustomerController {
 			return "customerCreated"; 
 		}
 	}
-	
-	public void updateAddress(HttpServletRequest request){
-		UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String name = userDetails.getUsername();
-		Customer customer = customerService.getUser(name);
-		CustomerAddress address = customerAddressService.getCustomerAddressByCustomerId(customer.getId());
-		String test = request.getParameter("address");		
-		if (test != "") {  
-			City testingCity = cityService.getCityByName(request.getParameter("city"));
-			if (address == null) {
-				CustomerAddress address1 = new CustomerAddress();
-				address1.setAddress(request.getParameter("address"));
-				address1.setAddress2(request.getParameter("address2"));
-				address1.setZipCode(Integer.parseInt(request.getParameter("zipCode")));
-				if (testingCity == null) {
-					City testingCity1 = new City();
-					testingCity1.setName(request.getParameter("city"));
-					State state = stateService.getState(Integer.parseInt(request.getParameter("states")));
-					testingCity1.setStateFK(state); 
-					cityService.insertCity(testingCity1);
-					testingCity1 = cityService.getCityByName(request.getParameter("city"));
-					address1.setCityFK(testingCity1);
-				}else {
-					address1.setCityFK(testingCity);
-				}
-				address1.setCustomerFK(customer);
-				customerAddressService.insertCustomerAddress(address1);
-			}else {
-				address.setAddress(request.getParameter("address") );
-				address.setAddress2(request.getParameter("address2") );
-				address.setZipCode(Integer.parseInt(request.getParameter("zipCode")));
-				if (testingCity == null) {
-					City testingCity1 = new City();
-					testingCity1.setName(request.getParameter("city"));
-					State state = stateService.getState(Integer.parseInt(request.getParameter("states")));
-					testingCity1.setStateFK(state); 
-					cityService.insertCity(testingCity1);
-					testingCity1 = cityService.getCityByName(request.getParameter("city"));
-					address.setCityFK(testingCity1);
-				}else {
-					address.setCityFK(testingCity);
-				}							
-				customerAddressService.updateCustomerAddress(address);
-			}						
-		}
-	}
+		
 	
 	public void updateUserInfo(HttpServletRequest request){
 		//org.springframework.security.core.userdetails.User current = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -216,16 +146,12 @@ public class CustomerController {
 		String oldUsername = "";
 		oldUsername = customer.getEmail();
 		customer.setFirstName(request.getParameter("firstName"));
-		customer.setLastName(request.getParameter("lastName"));
-		customer.setTitle(request.getParameter("title"));
+		customer.setLastName(request.getParameter("lastName"));		
 		if (request.getParameter("email") != customer.getEmail()) {
 			usernameChanged = true;
 		}
 		customer.setEmail(request.getParameter("email"));
-		customer.setPassword(passwordEncoder.encode(request.getParameter("password")));
-		customer.setLanguage(request.getParameter("language"));
-		customer.setNewsletter(Boolean.parseBoolean(request.getParameter("newslatter")));
-		customer.setPhone(null);
+		customer.setPassword(passwordEncoder.encode(request.getParameter("password")));		
 		customerService.updateUser(customer);
 		
 		if (usernameChanged == true) {
@@ -248,33 +174,13 @@ public class CustomerController {
 	public void addCustomer(HttpServletRequest request) {		
 		Customer customer = new Customer();
 		customer.setFirstName(request.getParameter("firstName"));
-		customer.setLastName(request.getParameter("lastName"));
-		//customer.setTitle(request.getParameter("title"));
-		int test = Integer.parseInt(request.getParameter("title"));
-		if (test == 0) {
-			customer.setTitle("Mr.");
-		}else {
-			customer.setTitle("Ms.");
-		}
-		customer.setDob(request.getParameter("dob"));
+		customer.setLastName(request.getParameter("lastName"));		
 		customer.setEmail(request.getParameter("email"));
-		customer.setPassword(passwordEncoder.encode(request.getParameter("password")));
-		int test2 = Integer.parseInt(request.getParameter("language"));
-		if (test2 == 0) {
-			customer.setLanguage("en");
-		}else {
-			customer.setLanguage("de");
-		}
-		//customer.setLanguage(request.getParameter("language"));
-		customer.setPictureLink(""); //nope...ovo ide kasnije
-		customer.setAdmin(false);
-		customer.setHonorPoints(0);
-		customer.setPhone(null);
-		customer.setNewsletter(Boolean.parseBoolean(request.getParameter("newslatter"))); 
+		customer.setPassword(passwordEncoder.encode(request.getParameter("password")));		
+		customer.setAdmin(false);		
 		customer.setEnabled(true);
 		
-		customerService.insertCustomer(customer);
-		//sendConfirmationEmail(request, customer);
+		customerService.insertCustomer(customer);		
 	
 	}
 	
