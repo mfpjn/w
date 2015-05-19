@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>at.mfpjn</groupId>
@@ -317,6 +317,21 @@
 			<artifactId>camel-facebook</artifactId>
 			<version>2.15.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-twitter</artifactId>
+			<version>2.12.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-websocket</artifactId>
+			<version>2.15.2</version>
+		</dependency>
+		<dependency>
+           <groupId>org.twitter4j</groupId>
+           <artifactId>twitter4j-core</artifactId>
+           <version>[4.0,)</version>
+       </dependency>
 	</dependencies>
 
 	<repositories>
@@ -351,21 +366,18 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-maven-plugin</artifactId>
-                <version>2.15.2</version>
-                <configuration>
-                    <duration>5s</duration>
-                    <configClasses>org.apache.camel.example.spring.javaconfig.MyRouteConfig</configClasses>
+			<plugin>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-maven-plugin</artifactId>
+				<version>2.15.2</version>
+				<configuration>
+					<duration>5s</duration>
+					<configClasses>org.apache.camel.example.spring.javaconfig.MyRouteConfig</configClasses>
 					<basedPackages>org.apache.camel.example.spring.javaconfig</basedPackages>
-                    <!--
-                        You could set the base package directory and let spring to find
-                        the config classes for you
-                        <basedPackages>org.apache.camel.example.spring.javaconfig</basedPackages>
-                      -->
-                </configuration>
-            </plugin>
+					<!-- You could set the base package directory and let spring to find 
+						the config classes for you <basedPackages>org.apache.camel.example.spring.javaconfig</basedPackages> -->
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
