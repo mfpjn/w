@@ -87,7 +87,8 @@ public class HomePostController {
 		route.setAccessTokenSecret(accessTokenSecret);
 		route.setConsumerKey(consumerKey);
 		route.setConsumerSecret(consumerSecret);
-		route.setUser(user.getName());
+		//route.setUser(user.getName());
+		route.setUser("user");
 		route.setMessage(message);
 		try {
 			camelcontext.addRoutes(route);

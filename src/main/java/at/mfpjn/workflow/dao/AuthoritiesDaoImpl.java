@@ -1,6 +1,6 @@
 package at.mfpjn.workflow.dao;
 
-import at.mfpjn.workflow.dao.AuthoritiesDao;
+import at.mfpjn.workflow.model.Authorities;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +21,18 @@ public class AuthoritiesDaoImpl implements AuthoritiesDao {
 	}
 	
 	@Transactional
-	public void insertAuthority(at.mfpjn.workflow.model.Authorities authority) {
+	public void insertAuthority(Authorities authority) {
 		session().save(authority);
 	}
 	
 	@Transactional
-	public void updateAuthority(at.mfpjn.workflow.model.Authorities authority) {
+	public void updateAuthority(Authorities authority) {
 		session().update(authority);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public at.mfpjn.workflow.model.Authorities getByUsername(String username){
-		return (at.mfpjn.workflow.model.Authorities)session().createQuery("from Authorities where Username = :username").setParameter("username", username).uniqueResult();
+	public Authorities getByUsername(String username){
+		return (Authorities)session().createQuery("from Authorities where Username = :username").setParameter("username", username).uniqueResult();
 	}
 
 }

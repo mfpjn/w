@@ -2,18 +2,28 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
 <jsp:include page="comp/head.jsp" />
-<jsp:include page="comp/header.jsp" />
-<div class="container">
+<style>
+	body {
+		background-color: #FF2F40;
+	}
+</style>
+<div class="container overlay-slide">
 	<div class="row">
-		<div class="grid-100 tece"><h1>Your account has been created</h1></div>
+		<div class="grid-100 tece"><h1 style="color: #FFFFFF;">Your account has been created</h1></div>
 	</div>
 	<div class="row">
-		<div class="grid-100 tece">
-			<sf:form method="post" action="${pageContext.request.contextPath}/login" commandName="customer">
-				<button class="button-green" type="submit">Go to login page</button>
-			</sf:form>
+		<div class="grid-30 marg-35 tece">
+				<button id="loginButton" class="button-green" type="submit">Home</button>
 		</div>
 	</div>
 </div>
 
-<jsp:include page="comp/footer.jsp" />
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#loginButton').click(function (){
+			window.top.location.href = "${pageContext.request.contextPath}/";
+		})
+	})
+</script>
+
+<jsp:include page="comp/blank-footer.jsp" />

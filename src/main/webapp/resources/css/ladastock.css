@@ -13,7 +13,8 @@
   margin-right: auto; }
 
 .clearfix {
-  clear: both; }
+  clear: both;
+  height: 0; }
 
 .float-left {
   float: left; }
@@ -181,7 +182,7 @@ a:hover {
   zoom: 1; }
 
 /* Grids */
-.grid, .grid-5, .grid-10, .grid-15, .grid-20, .grid-25, .grid-30, .grid-325, .grid-35, .grid-40, .grid-45, .grid-50, .grid-55, .grid-60, .grid-65, .grid-70, .grid-75, .grid-80, .grid-85, .grid-90, .grid-95, .grid-33, .grid-100 {
+.grid, .grid-5, .grid-10, .grid-15, .grid-20, .grid-25, .grid-30, .grid-325, .grid-35, .grid-40, .grid-45, .grid-50, .grid-55, .grid-60, .grid-65, .grid-66, .grid-70, .grid-75, .grid-80, .grid-85, .grid-90, .grid-95, .grid-33, .grid-100 {
   display: block;
   float: left;
   padding: 0;

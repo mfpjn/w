@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="customer")
+@Table(name = "customer")
 public class Customer {
 	
 	@Id
@@ -25,12 +25,6 @@ public class Customer {
 	@NotBlank(message="Last name cannot be blank!")
 	@Pattern(regexp="^[-a-zA-Z]+$", message="Last name can only consist of letters!")
 	private String lastName;
-	
-	@Column(name="Title")
-	private String title;
-	
-	@Column(name="DOB")
-	private String dob;
 
 	@Column(name="Email")
 	@Email(message="This does not appear to be a valid e-mail address!")
@@ -43,56 +37,26 @@ public class Customer {
 	@Pattern(regexp="^[a-zA-Z0-9]\\w{5,100}$", message="This is not a valid password")
 	private String password;
 	
-	@Column(name="Language")
-	@NotBlank(message="Language can not be blank!")
-	private String language;
-	
-	@Column(name="PictureLink")
-	private String pictureLink;
-	
-	@Column(name="Admin")
+	@Column(name="Admin", columnDefinition = "TINYINT(1)")
 	private Boolean admin;
-	
-	@Column(name="HonorPoints")
-	private int honorPoints;
-	
-	@Column(name="Phone")
-	@Size(min=10, message="Size ")
-	@NotBlank(message="Phone number can not be blank!")
-	private String phone;
-	
-	@Column(name="NewsLetter")
-	private Boolean newsletter;
-	
-	@Column(name="enabled")
+
+	@Column(name="Enabled", columnDefinition = "TINYINT(1)")
 	private Boolean enabled;
+
+	@Column(name="HasFacebook", columnDefinition = "TINYINT(1)")
+	private Boolean hasFacebook;
+
+	@Column(name="HasInstagram", columnDefinition = "TINYINT(1)")
+	private Boolean hasInstagram;
+
+	@Column(name="HasTwitter", columnDefinition = "TINYINT(1)")
+	private Boolean hasTwitter;
+
+	@Column(name="HasGoogle", columnDefinition = "TINYINT(1)")
+	private Boolean hasGoogle;
 
 	public Customer()
 	{
-		
-	}
-
-	
-	public Customer(int id, String firstName, String lastName, String dob, String email,String title,
-			String password, String language, String pictureLink,
-			Boolean admin, int honorPoints, String phone, Boolean newsletter,
-			Boolean enabled) {
-
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.title = title;
-		this.dob = dob;
-		this.email = email;
-		this.password = password;
-		this.language = language;
-		this.pictureLink = pictureLink;
-		this.admin = admin;
-		this.honorPoints = honorPoints;
-		this.phone = phone;
-		this.newsletter = newsletter;
-		this.enabled = enabled;
 	}
 
 	public int getId() {
@@ -119,22 +83,6 @@ public class Customer {
 		this.lastName = lastName;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDob() {
-		return dob;
-	}
-
-	public void setDob(String dob) {
-		this.dob = dob;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -151,52 +99,12 @@ public class Customer {
 		this.password = password;
 	}
 
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getPictureLink() {
-		return pictureLink;
-	}
-
-	public void setPictureLink(String pictureLink) {
-		this.pictureLink = pictureLink;
-	}
-
 	public Boolean getAdmin() {
 		return admin;
 	}
 
 	public void setAdmin(Boolean admin) {
 		this.admin = admin;
-	}
-
-	public int getHonorPoints() {
-		return honorPoints;
-	}
-
-	public void setHonorPoints(int honorPoints) {
-		this.honorPoints = honorPoints;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Boolean getNewsletter() {
-		return newsletter;
-	}
-
-	public void setNewsletter(Boolean newsletter) {
-		this.newsletter = newsletter;
 	}
 
 	public Boolean getEnabled() {
@@ -207,16 +115,52 @@ public class Customer {
 		this.enabled = enabled;
 	}
 
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", firstName=" + firstName
-
-				+ ", lastName=" + lastName + ", title=" + title + ", dob="
-				+ dob + ", email=" + email + ", password=" + password
-				+ ", language=" + language + ", pictureLink=" + pictureLink
-				+ ", admin=" + admin + ", honorPoints=" + honorPoints
-				+ ", phone=" + phone + ", newsletter=" + newsletter
-				+ ", enabled=" + enabled + "]";
+	public Boolean getHasFacebook() {
+		return hasFacebook;
 	}
 
+	public void setHasFacebook(Boolean hasFacebook) {
+		this.hasFacebook = hasFacebook;
+	}
+
+	public Boolean getHasInstagram() {
+		return hasInstagram;
+	}
+
+	public void setHasInstagram(Boolean hasInstagram) {
+		this.hasInstagram = hasInstagram;
+	}
+
+	public Boolean getHasTwitter() {
+		return hasTwitter;
+	}
+
+	public void setHasTwitter(Boolean hasTwitter) {
+		this.hasTwitter = hasTwitter;
+	}
+
+	public Boolean getHasGoogle() {
+		return hasGoogle;
+	}
+
+	public void setHasGoogle(Boolean hasGoogle) {
+		this.hasGoogle = hasGoogle;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", admin=" + admin +
+				", enabled=" + enabled +
+				", hasFacebook=" + hasFacebook +
+				", hasInstagram=" + hasInstagram +
+				", hasTwitter=" + hasTwitter +
+				", hasGoogle=" + hasGoogle +
+				'}';
+	}
 }
