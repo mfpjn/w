@@ -167,3 +167,4 @@ proguard/
 # Log Files
 *.log
 
+/target/
