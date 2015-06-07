@@ -101,20 +101,25 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		// message = message + " - at " + now.toString();
 
 		// Tweet with Schick-it tag (length <= 120)
-		message = "1234567890";
+		message = "1234567";
 
 		// Tweet without Schick-it tag (length > 120)
 		// message =
 		// "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
-		// Message endpoint, message router, message translator, log, delay
+		// Message endpoint, message router, message translator, log, delay, multicast 
 		String endpoint = "twitter://timeline/user?" + getUriTokens();
+		String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com";
 		from(endpoint).setBody().constant(message).choice()
 				.when(body().regex(".{1,120}"))
 				.transform(body().append(" sent via Schick-It!"))
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint)
+				.log(LoggingLevel.INFO, "Tweeting: " + message).multicast().to(endpoint, emailConfirmation).endChoice()
 				.otherwise().transform(body()).delay(1000)
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
+				.log(LoggingLevel.INFO, "Tweeting: " + message).multicast().to(endpoint, emailConfirmation);
+		//from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+		//String subject = "subject";
+		//from("direct:a").setHeader("subject", constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+		
 		System.out.println("would like to twwet : " + message);
 		System.out.println("by : " + endpoint);
 	}
