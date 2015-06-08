@@ -19,56 +19,58 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
-import at.mfpjn.workflow.twitter.TwitterRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 
 @Controller
 public class HomePostController {
 	private static String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
 	private static String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
 	private static String accessToken = "";
-	private static String accessTokenSecret = "";	
+	private static String accessTokenSecret = "";
 
 	private Twitter twitter;
 	private RequestToken requestToken;
 	private TwitterRouteBuilder route;
 	private CamelContext camelcontext;
-	
+
 	private User user;
 
 	@RequestMapping(value = "/homePost")
 	public String homePost() throws Exception {
 		twitter = new TwitterFactory().getInstance();
-		twitter.setOAuthConsumer(consumerKey,
-				consumerSecret);
+		twitter.setOAuthConsumer(consumerKey, consumerSecret);
 		requestToken = twitter.getOAuthRequestToken();
 		AccessToken accessToken = null;
 		java.awt.Desktop.getDesktop().browse(
 				new URI(requestToken.getAuthorizationURL()));
 
 		// Ask for user pin
-		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		    while (null == accessToken) {
-		      System.out.println("Open the following URL and grant access to your account:");
-		      System.out.println(requestToken.getAuthorizationURL());
-		      System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
-		      String pin = br.readLine();
-		      try{
-		         if(pin.length() > 0){
-		           accessToken = twitter.getOAuthAccessToken(requestToken, pin);
-		         }else{
-		           accessToken = twitter.getOAuthAccessToken();
-		         }
-		      } catch (TwitterException te) {
-		        if(401 == te.getStatusCode()){
-		          System.out.println("Unable to get the access token.");
-		        }else{
-		          te.printStackTrace();
-		        }
-		      }
-		    }
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (null == accessToken) {
+			System.out
+					.println("Open the following URL and grant access to your account:");
+			System.out.println(requestToken.getAuthorizationURL());
+			System.out
+					.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
+			String pin = br.readLine();
+			try {
+				if (pin.length() > 0) {
+					accessToken = twitter
+							.getOAuthAccessToken(requestToken, pin);
+				} else {
+					accessToken = twitter.getOAuthAccessToken();
+				}
+			} catch (TwitterException te) {
+				if (401 == te.getStatusCode()) {
+					System.out.println("Unable to get the access token.");
+				} else {
+					te.printStackTrace();
+				}
+			}
+		}
 		storeAccessToken(twitter.verifyCredentials().getId(), accessToken);
 		user = twitter.showUser(twitter.getId());
-		
+
 		// post tweet
 		configureRoute();
 
@@ -85,17 +87,16 @@ public class HomePostController {
 	public void configureRoute() {
 		// test tweet message
 		String message = "Here is my last awesome post!";
-		
+
 		camelcontext = new DefaultCamelContext();
 		ProducerTemplate template = camelcontext.createProducerTemplate();
-		
-		
+
 		route = new TwitterRouteBuilder();
 		route.setAccessToken(accessToken);
 		route.setAccessTokenSecret(accessTokenSecret);
 		route.setConsumerKey(consumerKey);
 		route.setConsumerSecret(consumerSecret);
-		//route.setUser(user.getName());
+		// route.setUser(user.getName());
 		route.setUser("user");
 		route.setMessage(message);
 		try {
@@ -111,24 +112,29 @@ public class HomePostController {
 			System.out.println("fail to start camel context");
 			e.printStackTrace();
 		}
-		
-		template.send("direct:emailConfirmation", createConfirmationEmail("Nicolas", "Lett", message));
+
+		template.send("direct:emailConfirmation",
+				createConfirmationEmail("Nicolas", "Lett", message));
 	}
-	
+
 	protected RouteBuilder createStringTemplateRouteBuilder() throws Exception {
-	    return new RouteBuilder() {
-	        public void configure() throws Exception {
-	            from("direct:emailConfirmation").to("string-template:templates/email.tm").to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
-	        }
-	    };
+		return new RouteBuilder() {
+			public void configure() throws Exception {
+				from("direct:emailConfirmation")
+						.to("string-template:templates/email.tm")
+						.to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+			}
+		};
 	}
-	
-	private Exchange createConfirmationEmail(String firstName, String lastName, String postMessage) {
-	    Exchange exchange = camelcontext.getEndpoint("direct:emailConfirmation").createExchange();
-	    Message msg = exchange.getIn();
-	    msg.setHeader("firstName", firstName);
-	    msg.setHeader("lastName", lastName);
-	    msg.setBody(postMessage);
-	    return exchange;
+
+	private Exchange createConfirmationEmail(String firstName, String lastName,
+			String postMessage) {
+		Exchange exchange = camelcontext
+				.getEndpoint("direct:emailConfirmation").createExchange();
+		Message msg = exchange.getIn();
+		msg.setHeader("firstName", firstName);
+		msg.setHeader("lastName", lastName);
+		msg.setBody(postMessage);
+		return exchange;
 	}
 }
