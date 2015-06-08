@@ -5,6 +5,10 @@ import java.io.InputStreamReader;
 import java.net.URI;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +31,7 @@ public class HomePostController {
 	private Twitter twitter;
 	private RequestToken requestToken;
 	private TwitterRouteBuilder route;
+	private CamelContext camelcontext;
 	
 	private User user;
 
@@ -79,9 +84,12 @@ public class HomePostController {
 
 	public void configureRoute() {
 		// test tweet message
-		String message = "1";
+		String message = "Here is my last awesome post!";
 		
-		CamelContext camelcontext = new DefaultCamelContext();
+		camelcontext = new DefaultCamelContext();
+		ProducerTemplate template = camelcontext.createProducerTemplate();
+		
+		
 		route = new TwitterRouteBuilder();
 		route.setAccessToken(accessToken);
 		route.setAccessTokenSecret(accessTokenSecret);
@@ -92,6 +100,7 @@ public class HomePostController {
 		route.setMessage(message);
 		try {
 			camelcontext.addRoutes(route);
+			camelcontext.addRoutes(createStringTemplateRouteBuilder());
 		} catch (Exception e) {
 			System.out.println("fail to add route");
 			e.printStackTrace();
@@ -102,5 +111,24 @@ public class HomePostController {
 			System.out.println("fail to start camel context");
 			e.printStackTrace();
 		}
+		
+		template.send("direct:emailConfirmation", createConfirmationEmail("Nicolas", "Lett", message));
+	}
+	
+	protected RouteBuilder createStringTemplateRouteBuilder() throws Exception {
+	    return new RouteBuilder() {
+	        public void configure() throws Exception {
+	            from("direct:emailConfirmation").to("string-template:templates/email.tm").to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+	        }
+	    };
+	}
+	
+	private Exchange createConfirmationEmail(String firstName, String lastName, String postMessage) {
+	    Exchange exchange = camelcontext.getEndpoint("direct:emailConfirmation").createExchange();
+	    Message msg = exchange.getIn();
+	    msg.setHeader("firstName", firstName);
+	    msg.setHeader("lastName", lastName);
+	    msg.setBody(postMessage);
+	    return exchange;
 	}
 }
