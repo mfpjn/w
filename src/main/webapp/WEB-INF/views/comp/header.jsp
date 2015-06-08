@@ -20,18 +20,6 @@
 								</li>
 							</a>
 
-
-							<a href="<c:url value ='${pageContext.request.contextPath}/../productPurchased/'/>">
-								<li>
-									<img src="${pageContext.request.contextPath}/resources/img/user-buy.svg" style="width: 9px; margin-right: 8px;" /> Purchased products
-								</li>
-							</a>
-							<a href="<c:url value ='${pageContext.request.contextPath}/../productSold/'/>">
-							<li>
-								<img src="${pageContext.request.contextPath}/resources/img/user-sell.svg" style="width: 9px; margin-right: 8px;" /> Sold products
-							</li>
-							</a>
-
 							<a href="<c:url value ='/j_spring_security_logout'/>">
 								<li>
 									<img src="${pageContext.request.contextPath}/resources/img/user-profile.svg" style="width: 9px; margin-right: 8px;" /> Log out
