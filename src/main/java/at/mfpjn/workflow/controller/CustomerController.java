@@ -3,6 +3,7 @@ package at.mfpjn.workflow.controller;
 
 import at.mfpjn.workflow.model.*;
 import at.mfpjn.workflow.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
@@ -38,7 +40,10 @@ public class CustomerController {
 	private MailSender mailSender;
 	
 	@Autowired
-	SendMail sendMail;		
+	SendMail sendMail;	
+	
+	@Autowired
+	UserMediaChannelsParametersService umcpService;
 	
 	
 	@RequestMapping("/registerCustomer")
@@ -130,6 +135,7 @@ public class CustomerController {
 			}
 			model.addAttribute("authoritie", new Authorities());
 			addAuthority(request);
+			addUserMediaChannels(request);
 			sendConfirmationEmail(request, customer);
 			return "customerCreated"; 
 		}
@@ -179,7 +185,20 @@ public class CustomerController {
 		customer.setPassword(passwordEncoder.encode(request.getParameter("password")));		
 		customer.setAdmin(false);		
 		customer.setEnabled(true);
-		
+		int test = Integer.parseInt(request.getParameter("facebook"));
+		if (test == 1) {
+			customer.setHasFacebook(true);
+		}else {
+			customer.setHasFacebook(false);
+		}
+		int test2 = Integer.parseInt(request.getParameter("twitter"));
+		if (test2 == 1) {
+			customer.setHasTwitter(true);
+		}else {
+			customer.setHasTwitter(false);
+		}
+		customer.setHasGoogle(false);
+		customer.setHasInstagram(false);
 		customerService.insertCustomer(customer);		
 	
 	}
@@ -189,6 +208,28 @@ public class CustomerController {
 		authority.setUsername(request.getParameter("email"));
 		authority.setAuthority("user");
 		authoritiesService.insertAuthoritie(authority);
+	}
+	
+	public void addUserMediaChannels(HttpServletRequest request){
+		UserMediaChannelsParameters media = new UserMediaChannelsParameters();
+		Customer customer = customerService.getUser(request.getParameter("email"));
+		int test = Integer.parseInt(request.getParameter("facebook"));
+		if (test == 1) {
+			media.setAccessToken(request.getParameter("accesstoken"));
+			media.setAccessTokenSecret(request.getParameter("accesstokensecret"));
+			media.setMedia("Facebook");	
+			media.setCustomerId(customer);			
+			umcpService.insertParameter(media);
+		}
+		int test2 = Integer.parseInt(request.getParameter("twitter"));
+		if (test2 == 1) {
+			media.setAccessToken(request.getParameter("accesstokenT"));
+			media.setAccessTokenSecret(request.getParameter("accesstokensecretT"));
+			media.setMedia("Twitter");
+			media.setCustomerId(customer);
+			
+			umcpService.insertParameter(media);
+		}
 	}
 }
 

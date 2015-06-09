@@ -37,6 +37,24 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	private String accessTokenSecret;
 	private String user;
 	private String message;
+	private int delay = 2;
+	private String searchTerm;
+
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
+	}
 
 	public void setMessage(String m) {
 		this.message = m;
@@ -94,6 +112,28 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	public void configure() throws Exception {
 		sendTweet(message);
 	}
+//		@Override
+//	    public void configure() throws Exception {
+//	        // setup Camel web-socket component on the port we have defined
+//	        WebsocketComponent wc = getContext().getComponent("websocket", WebsocketComponent.class);
+//	        wc.setPort(port);
+//	        // we can serve static resources from the classpath: or file: system
+//	        wc.setStaticResources("classpath:.");
+//
+//	        // setup Twitter component
+//	        TwitterComponent tc = getContext().getComponent("twitter", TwitterComponent.class);
+//	        tc.setAccessToken(accessToken);
+//	        tc.setAccessTokenSecret(accessTokenSecret);
+//	        tc.setConsumerKey(consumerKey);
+//	        tc.setConsumerSecret(consumerSecret);
+//
+//	        // poll twitter search for new tweets
+//	        fromF("twitter://search?type=polling&delay=%s&keywords=%s", delay, searchTerm)
+//	            .to("log:tweet")
+//	            // and push tweets to all web socket subscribers on camel-tweet
+//	            .to("websocket:camel-tweet?sendToAll=true");
+//	        System.out.println("AOK!");
+//	    }
 
 	public void sendTweet(String message) {
 		// send tweet
@@ -129,4 +169,5 @@ public class TwitterRouteBuilder extends RouteBuilder {
 				+ consumerSecret + "&accessToken=" + accessToken
 				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
 	}
+	
 }

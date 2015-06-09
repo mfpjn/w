@@ -14,8 +14,14 @@ public class UserMediaChannelsParameters {
     @Column(name="Id")
     private int id;
 
-    @Column(name="FacebookToken")
-    private String facebookToken;
+    @Column(name="Media")
+    private String media;
+    
+    @Column(name="AccessToken")
+    private String accessToken;
+    
+    @Column(name="AccessTokenSecret")
+    private String accessTokenSecret;
 
     @ManyToOne
     @JoinColumn(name="Customer_Id")
@@ -23,42 +29,65 @@ public class UserMediaChannelsParameters {
 
     public UserMediaChannelsParameters() {
     }
+    
+	public UserMediaChannelsParameters(int id, String media,
+			String accessToken, String accessTokenSecret, Customer customerId) {
+		super();
+		this.id = id;
+		this.media = media;
+		this.accessToken = accessToken;
+		this.accessTokenSecret = accessTokenSecret;
+		this.customerId = customerId;
+	}
 
-    public UserMediaChannelsParameters(String facebookToken, Customer customerId) {
-        this.facebookToken = facebookToken;
-        this.customerId = customerId;
-    }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getFacebookToken() {
-        return facebookToken;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setFacebookToken(String facebookToken) {
-        this.facebookToken = facebookToken;
-    }
+	public String getMedia() {
+		return media;
+	}
 
-    public Customer getCustomerId() {
-        return customerId;
-    }
+	public void setMedia(String media) {
+		this.media = media;
+	}
 
-    public void setCustomerId(Customer customerId) {
-        this.customerId = customerId;
-    }
+	public String getAccessToken() {
+		return accessToken;
+	}
 
-    @Override
-    public String toString() {
-        return "UserMediaChannelsParametersService{" +
-                "id=" + id +
-                ", facebookToken='" + facebookToken + '\'' +
-                ", customerId=" + customerId +
-                '}';
-    }
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getAccessTokenSecret() {
+		return accessTokenSecret;
+	}
+
+	public void setAccessTokenSecret(String accessTokenSecret) {
+		this.accessTokenSecret = accessTokenSecret;
+	}
+
+	public Customer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Customer customerId) {
+		this.customerId = customerId;
+	}
+
+	@Override
+	public String toString() {
+		return "UserMediaChannelsParameters [id=" + id + ", media=" + media
+				+ ", accessToken=" + accessToken + ", accessTokenSecret="
+				+ accessTokenSecret + ", customerId=" + customerId + "]";
+	}
+
+    
 }

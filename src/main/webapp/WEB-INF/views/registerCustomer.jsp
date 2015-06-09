@@ -38,6 +38,98 @@
 			</div>
 		 </div>		 
 		<div class="row">
+		<div class="row">
+			<div class="grid-70 marg-15 tece">
+				<select name="facebook" id="facebookSelect">
+					<option class="custom-option" value="0" >Do you want to use Facebook?</option>
+					<option class="custom-option" value="1" >I want to use Facebook</option>
+					<option class="custom-option" value="2" >I do not want to use Facebook</option>
+				</select>
+			</div>
+		 </div>
+		 <div id="facebookTokens">
+			 <div class="row">
+				<div class="grid-70 marg-15 tece">
+					<input path="accesstoken" name="accesstoken" type="text" placeholder="Access Token"/>
+<%-- 					<sf:errors class="form-error" path="accestoken"></sf:errors> --%>
+				</div>
+			 </div>	
+			 <div class="row">
+				<div class="grid-70 marg-15 tece">
+					<input path="accesstokensecret" name="accesstokensecret" type="text" placeholder="Access Token Secret"/>
+<%-- 					<sf:errors class="form-error" path="accestokensecret"></sf:errors> --%>
+				</div>
+			 </div>
+		 </div>
+		 <style>
+		 	#facebookTokens {
+		 		height: 0;
+		 		visibility: hidden;
+		 		overflow: hidden;
+		 	}
+		 </style>
+		 <script>
+		 	$(document).ready(function() {
+		 		$('#facebookSelect').on('change', function () {
+		 			var selected = $(this).val();
+		 			if (selected == 1) {
+		 				$('#facebookTokens').css('height', '165px');
+		 				$('#facebookTokens').css('visibility', 'visible');
+		 				$('#facebookTokens').css('overflow', 'visible');
+		 			} else {
+		 				$('#facebookTokens').css('height', '0');
+			 			$('#facebookTokens').css('visibility', 'hidden');
+			 			$('#facebookTokens').css('overflow', 'hidden');
+		 			}
+		 		})
+		 	})
+		 </script>		 
+		 <div class="row">
+			<div class="grid-70 marg-15 tece">
+				<select name="twitter" id="twitterSelect">
+					<option class="custom-option" value="0" >Do you want to use Twitter?</option>
+					<option class="custom-option" value="1" >I want to use Twitter</option>
+					<option class="custom-option" value="2" >I do not want to use Twitter</option>
+				</select>
+			</div>
+		 </div>
+		 <div id="twitterTokens">
+		 	<div class="row">
+				<div class="grid-70 marg-15 tece">
+					<input path="accesstokenT" name="accesstokenT" type="text" placeholder="Access Token"/>
+<%-- 					<sf:errors class="form-error" path="accestoken"></sf:errors> --%>
+				</div>
+			 </div>	
+			 <div class="row">
+				<div class="grid-70 marg-15 tece">
+					<input path="accesstokensecretT" name="accesstokensecretT" type="text" placeholder="Access Token Secret"/>
+<%-- 					<sf:errors class="form-error" path="accestokensecret"></sf:errors> --%>
+				</div>
+			 </div>
+		 </div>
+		 <style>
+		 	#twitterTokens {
+		 		height: 0;
+		 		visibility: hidden;
+		 		overflow: hidden;
+		 	}
+		 </style>
+		 <script>
+		 	$(document).ready(function() {
+		 		$('#twitterSelect').on('change', function () {
+		 			var selected = $(this).val();
+		 			if (selected == 1) {
+		 				$('#twitterTokens').css('height', '165px');
+		 				$('#twitterTokens').css('visibility', 'visible');
+		 				$('#twitterTokens').css('overflow', 'visible');
+		 			} else {
+		 				$('#twitterTokens').css('height', '0');
+			 			$('#twitterTokens').css('visibility', 'hidden');
+			 			$('#twitterTokens').css('overflow', 'hidden');
+		 			}
+		 		})
+		 	})
+		 </script>
 			<div class="grid-70 marg-15 tece">
 		  		<button class="button-green" type="submit">Register</button>
 			</div>

@@ -21,8 +21,8 @@ import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 public class HomePostController {
 	private static String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
 	private static String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
-	private static String accessToken = "";
-	private static String accessTokenSecret = "";	
+	private static String accessToken = ""; //3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l
+	private static String accessTokenSecret = "";	//U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx
 
 	private Twitter twitter;
 	private RequestToken requestToken;
@@ -30,6 +30,32 @@ public class HomePostController {
 	
 	private User user;
 
+	@RequestMapping(value="/homePost2")
+	public String homePOst2() throws Exception{
+		TwitterRouteBuilder route2 = new TwitterRouteBuilder();
+		route2.setAccessToken("3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l");
+		route2.setAccessTokenSecret("U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx");
+		route2.setConsumerKey("XhLtFqzkvisnh5v"); //XhLtFqzkvisnh5vQpU3zdlK7P
+		route2.setConsumerSecret("CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbn");//CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4
+		route2.setSearchTerm("1");
+		route2.setDelay(2);
+		//route2.setPort(9090);
+		CamelContext camelcontext = new DefaultCamelContext();		
+		try {
+			camelcontext.addRoutes(route2);
+		} catch (Exception e) {
+			System.out.println("fail to add route");
+			e.printStackTrace();
+		}
+		try {
+			camelcontext.start();
+		} catch (Exception e) {
+			System.out.println("fail to start camel context");
+			e.printStackTrace();
+		}
+		return "homePost2";
+	}
+	
 	@RequestMapping(value = "/homePost")
 	public String homePost() throws Exception {
 		twitter = new TwitterFactory().getInstance();
