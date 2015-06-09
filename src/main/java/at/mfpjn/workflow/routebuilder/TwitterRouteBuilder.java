@@ -101,7 +101,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		// message = message + " - at " + now.toString();
 
 		// Tweet with Schick-it tag (length <= 120)
-		message = "1234567";
+		message = "123456";
 
 		// Tweet without Schick-it tag (length > 120)
 		// message =
@@ -113,15 +113,18 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		from(endpoint).setBody().constant(message).choice()
 				.when(body().regex(".{1,120}"))
 				.transform(body().append(" sent via Schick-It!"))
-				.log(LoggingLevel.INFO, "Tweeting: " + message).multicast().to(endpoint, emailConfirmation).endChoice()
+				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint).endChoice()
 				.otherwise().transform(body()).delay(1000)
-				.log(LoggingLevel.INFO, "Tweeting: " + message).multicast().to(endpoint, emailConfirmation);
+				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
 		//from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
 		//String subject = "subject";
 		//from("direct:a").setHeader("subject", constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
 		
 		System.out.println("would like to twwet : " + message);
 		System.out.println("by : " + endpoint);
+		
+		
+		from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
 	}
 
 	protected String getUriTokens() {
