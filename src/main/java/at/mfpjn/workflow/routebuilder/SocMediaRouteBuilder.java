@@ -40,7 +40,8 @@ public class SocMediaRouteBuilder extends RouteBuilder {
 
 
 	public void configure() throws Exception{
-		
+
+		//why not split in two routs?
 		
 		from("jms:messages").
 		process(new Processor() {
@@ -68,7 +69,7 @@ public class SocMediaRouteBuilder extends RouteBuilder {
         from("jms:twitterq").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 System.out.println("Twitter queue: " 
-                        + exchange.getIn().getBody());   
+                        + exchange.getIn().getBody());
             }
         });
 		

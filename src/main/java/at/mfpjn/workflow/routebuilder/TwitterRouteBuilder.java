@@ -147,7 +147,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 
 		// Message endpoint, message router, message translator, log, delay, multicast 
 		String endpoint = "twitter://timeline/user?" + getUriTokens();
-		String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com";
+		String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolaz@gmail.com";
 		from(endpoint).setBody().constant(message).choice()
 				.when(body().regex(".{1,120}"))
 				.transform(body().append(" sent via Schick-It!"))
