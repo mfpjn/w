@@ -17,12 +17,10 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import java.util.Date;
-
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.twitter.TwitterComponent;
-import org.apache.camel.component.websocket.WebsocketComponent;
+
+import java.util.Date;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
