@@ -16,8 +16,6 @@
 			expression="(dao|model)\..*" />
 	</context:component-scan>
 
-	<beans profile="production">
-
 		<jee:jndi-lookup jndi-name="jdbc/spring" id="dataSource"
 			expected-type="javax.sql.DataSource">
 		</jee:jndi-lookup>
@@ -31,6 +29,5 @@
 			class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor">
 		</bean>
 		<tx:annotation-driven />
-	</beans>
 
 </beans>

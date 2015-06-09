@@ -486,7 +486,7 @@ select {
   background-size: 6px auto; }
 
 .soz-icon.twitter {
-  background-image: url("../img/connect-twitter.svg");
+  background-image: url(../img/connect-twitter.svg");
   background-size: 12px auto; }
 
 .soz-icon.google {

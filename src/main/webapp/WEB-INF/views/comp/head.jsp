@@ -38,10 +38,7 @@
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resoures/img/favicon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/resoures/img/favicon.ico" />
 
-<!-- <link rel="stylesheet" type="text/css" -->
-<%-- 	href="${pageContext.request.contextPath}/resources/libs/bootstrap-3.1.1/css/bootstrap.min.css"> --%>
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/dropzone.css">
+
 </head>
 
 <body onLoad="hideLoadingLayer();">
