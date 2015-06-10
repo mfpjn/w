@@ -8,12 +8,20 @@
     <form action="${pageContext.request.contextPath}/sender" method="post">
         <div class="row">
             <div class="grid-100">
-                <input name="postMessage" type="text" placeholder="Enter Message here"/>
+                <textarea name="postMessage" type="text" placeholder="Enter Message here"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="grid-50 tece">
+                <input name="postTwitter" type="checkbox" value="y"/> Post on Twitter
+            </div>
+            <div class="grid-50 tece">
+                <input name="postFacebook" type="checkbox" value="y"/> Post on Facebook
             </div>
         </div>
         <div class="row">
             <div class="grid-100">
-                <button class="button-green" type="submit">Post on Twitter!</button>
+                <button class="button-green" type="submit">SchickIT!</button>
             </div>
         </div>
     </form>

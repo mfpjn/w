@@ -17,12 +17,10 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.RouteBuilder;
+
 import at.mfpjn.workflow.controller.FacebookController;
 
 public class SenderRouteBuilder extends RouteBuilder {
@@ -72,6 +70,6 @@ public class SenderRouteBuilder extends RouteBuilder {
                 fc.initFacebook();
                 fc.sendPost(post);
             }
-        });		
+        });	
 	}
 }

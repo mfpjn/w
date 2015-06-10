@@ -1,8 +1,7 @@
 package at.mfpjn.workflow.controller;
 
-import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
-import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
-import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
+import javax.jms.ConnectionFactory;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.jms.ConnectionFactory;
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
+import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 
 
 @Controller
@@ -44,31 +41,30 @@ public class SenderController {
         context.addComponent("jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
 
         // get post input
-        String messageToPost = (request.getParameter("postMessage"));
-        String post = messageToPost;
-        
-        // get facebook input
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Post to Facebook? (y/n):");
-        String facebookPost = br.readLine();
+        String post = (request.getParameter("postMessage"));
+        //System.out.print("Enter Post:");
+
+        //post on Facebook?
+        String facebookPost = (request.getParameter("postFacebook"));
+
         boolean facebookBool;
-        if(facebookPost.equals("y")){
-        	facebookBool = true;
+        if(facebookPost != null){
+            facebookBool = true;
         }else{
-        	facebookBool = false;
-        }
-        
-        // get twitter input
-        System.out.print("Post to Twitter? (y/n):");
-        String twitterPost = br.readLine();
-        boolean twitterBool;
-        if(twitterPost.equals("y")){
-        	twitterBool = true;
-        }else{
-        	twitterBool = false;
+            facebookBool = false;
         }
 
-        // Define routes
+        //post on Twitter?
+        String twitterPost = (request.getParameter("postTwitter"));
+
+        boolean twitterBool;
+        if(twitterPost != null){
+            twitterBool = true;
+        }else{
+            twitterBool = false;
+        }
+
+		// Define routes
         RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
         TwitterRouteBuilder twitterRoute = new TwitterRouteBuilder();
         twitterRoute.setAccessToken(accessToken);
@@ -98,24 +94,28 @@ public class SenderController {
         template.sendBody("direct:start", post);
         //TODO set first and last name of logged in user
         template.send("direct:emailConfirmation",
-				createConfirmationEmail("Nicolas", "Lett", messageToPost));
+				createConfirmationEmail("Nicolas", "Lett", post));
 
-        String statusFormToSplitter = template.requestBody("controlbus:route?routeId=formToSplitter&action=status", null, String.class);
+        String facebookRouteStatus1 = template.requestBody("controlbus:route?routeId=facebookRoute&action=status", null, String.class);
 
-        System.out.println("*** route from Form to Splitter: " + statusFormToSplitter);
+        System.out.println("*** Facebook Route Status (exp. Started): " + facebookRouteStatus1);
 
-        String status2 = template.requestBody("controlbus:route?routeId=route2&action=status", null, String.class);
+        String twitterRouteStatus1 = template.requestBody("controlbus:route?routeId=twitterRoute&action=status", null, String.class);
 
-        System.out.println("=============================ROUTE 2 STATUS: " + status2);
+        System.out.println("*** Twitter Route Status (exp. Started): " + twitterRouteStatus1);
         
         Thread.sleep(10000);
 
         // stop the CamelContext
         context.stop();
 
-        String status3 = template.requestBody("controlbus:route?routeId=route2&action=status", null, String.class);
+        String facebookRouteStatus2 = template.requestBody("controlbus:route?routeId=facebookRoute&action=status", null, String.class);
 
-        System.out.println("=============================ROUTE 2 STATUS: " + status3);
+        System.out.println("*** Facebook Route Status (exp. Stopped): " + facebookRouteStatus2);
+
+        String twitterRouteStatus2 = template.requestBody("controlbus:route?routeId=twitterRoute&action=status", null, String.class);
+
+        System.out.println("*** Twitter Route Status (exp. Stopped): " + twitterRouteStatus2);
     	
         return "home";
     }

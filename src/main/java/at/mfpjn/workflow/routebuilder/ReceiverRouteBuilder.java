@@ -24,47 +24,41 @@ import org.apache.camel.builder.RouteBuilder;
 
 public class ReceiverRouteBuilder extends RouteBuilder {
 
-	public boolean fb;
-	public boolean tw;
+    public boolean fb;
+    public boolean tw;
+    public String filterString;
 
 
+    public ReceiverRouteBuilder(boolean fb, boolean tw, String fs) {
+        super();
+        this.fb = fb;
+        this.tw = tw;
+        this.filterString = fs;
+    }
 
-	public ReceiverRouteBuilder(boolean fb, boolean tw) {
-		super();
-		this.fb = fb;
-		this.tw = tw;
-	}
 
-
-
-	public void configure() throws Exception{
+    public void configure() throws Exception {
 
         boolean one = false;
 
-        from("direct:facebook").
-                to("direct:receiver");
-
-        from("direct:twitter").
-                to("direct:receiver");
-
-
-        if(one){
-            from("direct:receiver").
-                    filter(body().contains("message")).
-                    process(new Processor() {
-                        public void process(Exchange exchange) throws Exception {
-                        }
-                    }).
-                    to("direct:filter");
-        }else{
-            from("direct:receiver").
-                    filter(body().contains("number")).
-                    process(new Processor() {
-                        public void process(Exchange exchange) throws Exception {
-                        }
-                    }).
-                    to("direct:filter");
+        if (fb) {
+            from("direct:facebook").
+                    to("direct:receiver");
         }
+
+        if (tw) {
+            from("direct:twitter").
+                    to("direct:receiver");
+        }
+
+
+        from("direct:receiver").
+                filter(body().contains(filterString)).
+                process(new Processor() {
+                    public void process(Exchange exchange) throws Exception {
+                    }
+                }).
+                to("direct:filter");
 
 
         // test that our route is working
@@ -73,7 +67,9 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                 System.out.println("Receiver queue: "
                         + exchange.getIn().getBody());
             }
-        });
+        }).to("file:reports");
+
+
 
     }
 }

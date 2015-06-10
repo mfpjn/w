@@ -35,7 +35,7 @@ public class ReceiverController {
 
 
         // add routes
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true);
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
         context.addRoutes(receiverRoute);
 
         ProducerTemplate template = context.createProducerTemplate();

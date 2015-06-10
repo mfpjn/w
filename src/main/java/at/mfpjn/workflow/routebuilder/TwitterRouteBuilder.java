@@ -22,8 +22,6 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
-import java.util.Date;
-
 /**
  * A Camel route that updates from twitter all tweets using having the search
  * term. And post the changes to web-socket, that can be viewed from a web page
@@ -39,11 +37,11 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	private String message;
 	private int delay = 2;
 	private String searchTerm;
-	
+
 	public String getMessage() {
 		return message;
 	}
-	
+
 	public int getDelay() {
 		return delay;
 	}
@@ -116,75 +114,82 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	public void configure() throws Exception {
 		sendTweet();
 	}
-//		@Override
-//	    public void configure() throws Exception {
-//	        // setup Camel web-socket component on the port we have defined
-//	        WebsocketComponent wc = getContext().getComponent("websocket", WebsocketComponent.class);
-//	        wc.setPort(port);
-//	        // we can serve static resources from the classpath: or file: system
-//	        wc.setStaticResources("classpath:.");
-//
-//	        // setup Twitter component
-//	        TwitterComponent tc = getContext().getComponent("twitter", TwitterComponent.class);
-//	        tc.setAccessToken(accessToken);
-//	        tc.setAccessTokenSecret(accessTokenSecret);
-//	        tc.setConsumerKey(consumerKey);
-//	        tc.setConsumerSecret(consumerSecret);
-//
-//	        // poll twitter search for new tweets
-//	        fromF("twitter://search?type=polling&delay=%s&keywords=%s", delay, searchTerm)
-//	            .to("log:tweet")
-//	            // and push tweets to all web socket subscribers on camel-tweet
-//	            .to("websocket:camel-tweet?sendToAll=true");
-//	        System.out.println("AOK!");
-//	    }
+
+	// @Override
+	// public void configure() throws Exception {
+	// // setup Camel web-socket component on the port we have defined
+	// WebsocketComponent wc = getContext().getComponent("websocket",
+	// WebsocketComponent.class);
+	// wc.setPort(port);
+	// // we can serve static resources from the classpath: or file: system
+	// wc.setStaticResources("classpath:.");
+	//
+	// // setup Twitter component
+	// TwitterComponent tc = getContext().getComponent("twitter",
+	// TwitterComponent.class);
+	// tc.setAccessToken(accessToken);
+	// tc.setAccessTokenSecret(accessTokenSecret);
+	// tc.setConsumerKey(consumerKey);
+	// tc.setConsumerSecret(consumerSecret);
+	//
+	// // poll twitter search for new tweets
+	// fromF("twitter://search?type=polling&delay=%s&keywords=%s", delay,
+	// searchTerm)
+	// .to("log:tweet")
+	// // and push tweets to all web socket subscribers on camel-tweet
+	// .to("websocket:camel-tweet?sendToAll=true");
+	// System.out.println("AOK!");
+	// }
 
 	public void sendTweet() {
 		// send tweet
-		Date now = new Date();
+		//Date now = new Date();
 
 		// Tweet with Schick-it tag (length <= 120)
-		//message = "123456";
+		// message = "123456";
 
 		// Tweet without Schick-it tag (length > 120)
 		// message =
 		// "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
-		// Message endpoint, message router, message translator, log, delay, multicast 
-		//String endpoint = "twitter://timeline/user?" + getUriTokens();
-		String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolaz@gmail.com";
-		
+		// Message endpoint, message router, message translator, log, delay,
+		// multicast
+		// String endpoint = "twitter://timeline/user?" + getUriTokens();
+		//String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolaz@gmail.com";
+
 		message = "message to be posted 5";
-		
+
 		from("direct:twitterq").process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-            	updateMessage("if you see this, you're good");
-                //message = (String) exchange.getIn().getBody();
-                System.out.println("Twitter queue: " 
-                        + exchange.getIn().getBody());
-            }
-        });		
-		//System.out.println("============================================= Message value = " + message);
-		
+			public void process(Exchange exchange) throws Exception {
+				updateMessage("if you see this, you're good");
+				// message = (String) exchange.getIn().getBody();
+				System.out.println("Twitter queue: "
+						+ exchange.getIn().getBody());
+			}
+		});
+		// System.out.println("============================================= Message value = "
+		// + message);
+
 		String endpoint = "twitter://timeline/user?" + getUriTokens();
-		
-        from(endpoint).setBody().constant(message).choice()
-		.when(body().regex(".{1,120}"))
-		.transform(body().append(" sent via Schick-It!"))
-		.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint).endChoice()
-		.otherwise().transform(body()).delay(1000)
-		.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
-		
-		//from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
-		//String subject = "subject";
-		//from("direct:a").setHeader("subject", constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
-		
-		//from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
+
+		from(endpoint).setBody().constant(message).choice()
+				.when(body().regex(".{1,120}"))
+				.transform(body().append(" sent via Schick-It!"))
+				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint)
+				.endChoice().otherwise().transform(body()).delay(1000)
+				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
+
+		// from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+		// String subject = "subject";
+		// from("direct:a").setHeader("subject",
+		// constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
+
+		// from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
 	}
 
 	protected void updateMessage(String string) {
 		this.message = string;
-		
+
 	}
 
 	protected String getUriTokens() {
@@ -192,5 +197,5 @@ public class TwitterRouteBuilder extends RouteBuilder {
 				+ consumerSecret + "&accessToken=" + accessToken
 				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
 	}
-	
+
 }

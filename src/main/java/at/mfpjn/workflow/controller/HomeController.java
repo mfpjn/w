@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value = "/")
-    public String home() throws Exception {
-        return "home";
-    }
+	@RequestMapping(value = "/")
+	public String home() throws Exception {
+		return "home";
+	}
 
-    @RequestMapping(value = "/inputForm")
-    public String inputForm() {
-        return "inputForm";
-    }
+	@RequestMapping(value = "/inputForm")
+	public String inputForm() {
+		return "inputForm";
+	}
 
-    @RequestMapping(value = "/receiverStart")
-    public String receiverStart() {
-        return "receiverStart";
-    }
+	@RequestMapping(value = "/receiverStart")
+	public String receiverStart() {
+		return "receiverStart";
+	}
 
 }
