@@ -21,7 +21,7 @@
         </div>
         <div class="row">
             <div class="grid-100">
-                <button class="button-green" type="submit">Post on Twitter!</button>
+                <button class="button-green" type="submit">SchickIT!</button>
             </div>
         </div>
     </form>
