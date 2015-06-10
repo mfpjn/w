@@ -6,6 +6,11 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 
+/* * * * * * * * * * * * * * * * * *
+ * Facebook test profile login:    *
+ * username: j20150505@gmail.com   *
+ * password: testemail             *
+ * * * * * * * * * * * * * * * * * */
 
 @Controller
 public class FacebookController {
@@ -22,7 +27,7 @@ public class FacebookController {
         facebook.setOAuthAppId("725656577542701",
                 "31ec413453a18aa144db8bc4dc330ace");
         facebook.setOAuthAccessToken(new AccessToken(
-                "CAAKTZBxaIii0BAO9qB6rLerbSVvtwTw0oDePg9aPIC1FHQECEY8gMTFVVG2IcBnyFiCYaA275fDMUCcZCHI6jcZChWD70r7uyyJdSkT03LLjpEwIuxUAanKZCWZBYy0fZCXqF09zpspZAgFuZCee7g3slhVZBXEeJjSimnaWQJN35OJkdsXlphYpqZAgliBlgyXqqoGAtSDWHYdQmEBUoqSWpn",
+                "CAAKTZBxaIii0BAORVI9rjrBbKbYAGZCB2VTsmVXyZBuRG9mSO3lcp7ElxavpqARWNrKiLB8o6w1pfzrlr0snQfnjwsHGelHG3WnK5cwmd70s6qlkkU5GKYPSZCK3r0LPhj7ZCrvJQQR3KZC55NYvwyIdQ2K8BaAvkm3DmyZBXurMt88f5rjhbBRXNvwqxZARMsKNdnzXPjnCjsrZA3DviN6VM",
                 null));
     }
 
