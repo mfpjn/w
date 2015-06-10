@@ -29,20 +29,18 @@ import java.util.Locale;
 public class HomeController {
 
     @RequestMapping(value = "/")
-    public String home(Locale locale, Model model, HttpServletRequest request) throws Exception {
-        String path = request.getSession().getServletContext().getRealPath("/resources/img");
-        System.err.println(new FileSystemResource(new File(path)));
-
-        FacebookController fc = new FacebookController();
-        fc.initFacebook();
-        fc.receivePost();
-
+    public String home() throws Exception {
         return "home";
     }
 
     @RequestMapping(value = "/inputForm")
-    public String test() {
+    public String inputForm() {
         return "inputForm";
+    }
+
+    @RequestMapping(value = "/receiverStart")
+    public String receiverStart() {
+        return "receiverStart";
     }
 
 }
