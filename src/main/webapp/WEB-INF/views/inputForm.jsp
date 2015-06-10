@@ -8,7 +8,7 @@
     <form action="${pageContext.request.contextPath}/sender" method="post">
         <div class="row">
             <div class="grid-100">
-                <input name="postMessage" type="text" placeholder="Enter Message here"/>
+                <textarea name="postMessage" type="text" placeholder="Enter Message here"></textarea>
             </div>
         </div>
         <div class="row">
