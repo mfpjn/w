@@ -1,7 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
-<div id="header" style="background-image: url(${pageContext.request.contextPath}/resources/img/header-logo.svg)">
+<div id="header">
 	<div class="container">
 		<div class="row no-bot">
 				<!-- Logout Button  -->
@@ -35,10 +35,10 @@
 						or<span id="login-button" class="text-red pointer" style="margin-left: 10px; vertical-align: middle;">login</span>
 					</div>
 				</sec:authorize>
-			<a href="${pageContext.request.contextPath}/"><div id="index-trigger" class="grid-10 pointer">&nbsp;</div></a>
-			<div id="ngo-trigger" class="grid-10 marg-15 pointer">&nbsp;</div>
-			<div id="categories-trigger" class="grid-10 pointer">&nbsp;</div>
-			<div id="search-trigger" class="grid-10 pointer">&nbsp;</div>
+			<a href="${pageContext.request.contextPath}/"><div class="grid-10">&nbsp;</div></a>
+			<div class="grid-10">&nbsp;</div>
+			<div class="grid-10">&nbsp;</div>
+			<div class="grid-10">&nbsp;</div>
 		</div>
 	</div>
 </div>

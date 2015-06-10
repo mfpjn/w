@@ -6,8 +6,7 @@
 <title>Workflow</title>
 
 <!-- Stylesheets -->
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/js/outdatedbrowser/outdatedbrowser.min.css" />
+
 <link rel="stylesheet" type="text/css"
 	href="/resources/${pageContext.request.contextPath}css/jquery.fancybox.css?v=2.1.5"
 	media="screen" />
@@ -35,16 +34,11 @@
 <meta name="format-detection" content="telephone=no">
 
 <!-- Fav Icon -->
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resoures/img/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="${pageContext.request.contextPath}/resoures/img/favicon.ico" />
+
 
 
 </head>
 
-<body onLoad="hideLoadingLayer();">
-	<div id="loading-layer">
-		<img id="loadinggif"
-			src="${pageContext.request.contextPath}/resources/img/preloader.gif"
-			alt="" width="250" border="0" style="margin-top: 20%;" />
-	</div>
+<body>
+
 	<a id="top"></a>
