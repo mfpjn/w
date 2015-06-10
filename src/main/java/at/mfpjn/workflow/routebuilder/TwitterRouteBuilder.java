@@ -17,7 +17,9 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
+import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import java.util.Date;
@@ -33,11 +35,15 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
-	private String user;
+	private String user = "user";
 	private String message;
 	private int delay = 2;
 	private String searchTerm;
-
+	
+	public String getMessage() {
+		return message;
+	}
+	
 	public int getDelay() {
 		return delay;
 	}
@@ -108,7 +114,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		sendTweet(message);
+		sendTweet();
 	}
 //		@Override
 //	    public void configure() throws Exception {
@@ -133,36 +139,52 @@ public class TwitterRouteBuilder extends RouteBuilder {
 //	        System.out.println("AOK!");
 //	    }
 
-	public void sendTweet(String message) {
+	public void sendTweet() {
 		// send tweet
 		Date now = new Date();
-		// message = message + " - at " + now.toString();
 
 		// Tweet with Schick-it tag (length <= 120)
-		message = "123456";
+		//message = "123456";
 
 		// Tweet without Schick-it tag (length > 120)
 		// message =
 		// "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
 		// Message endpoint, message router, message translator, log, delay, multicast 
-		String endpoint = "twitter://timeline/user?" + getUriTokens();
+		//String endpoint = "twitter://timeline/user?" + getUriTokens();
 		String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolaz@gmail.com";
-		from(endpoint).setBody().constant(message).choice()
-				.when(body().regex(".{1,120}"))
-				.transform(body().append(" sent via Schick-It!"))
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint).endChoice()
-				.otherwise().transform(body()).delay(1000)
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
+		
+		message = "message to be posted 5";
+		
+		from("direct:twitterq").process(new Processor() {
+            public void process(Exchange exchange) throws Exception {
+            	updateMessage("if you see this, you're good");
+                //message = (String) exchange.getIn().getBody();
+                System.out.println("Twitter queue: " 
+                        + exchange.getIn().getBody());
+            }
+        });		
+		//System.out.println("============================================= Message value = " + message);
+		
+		String endpoint = "twitter://timeline/user?" + getUriTokens();
+		
+        from(endpoint).setBody().constant(message).choice()
+		.when(body().regex(".{1,120}"))
+		.transform(body().append(" sent via Schick-It!"))
+		.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint).endChoice()
+		.otherwise().transform(body()).delay(1000)
+		.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
+		
 		//from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
 		//String subject = "subject";
 		//from("direct:a").setHeader("subject", constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
 		
-		System.out.println("would like to twwet : " + message);
-		System.out.println("by : " + endpoint);
+		//from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
+	}
+
+	protected void updateMessage(String string) {
+		this.message = string;
 		
-		
-		from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
 	}
 
 	protected String getUriTokens() {

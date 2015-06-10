@@ -1,8 +1,13 @@
 package at.mfpjn.workflow.controller;
 
 import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
+import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.jms.ConnectionFactory;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -20,12 +26,18 @@ import java.io.InputStreamReader;
 @Controller
 public class SenderController {
 
+	private static String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
+	private static String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
+	private static String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
+	private static String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
+	
+	private CamelContext context;
     
     @RequestMapping(value = "/sender", method = RequestMethod.POST)
     public String sender(HttpServletRequest request) throws Exception {
 
     	// create CamelContext
-        CamelContext context = new DefaultCamelContext();
+        context = new DefaultCamelContext();
         
         // connect to embedded ActiveMQ JMS broker
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
@@ -33,7 +45,6 @@ public class SenderController {
 
         // get post input
         String messageToPost = (request.getParameter("postMessage"));
-        //System.out.print("Enter Post:");
         String post = messageToPost;
         
         // get facebook input
@@ -57,9 +68,27 @@ public class SenderController {
         	twitterBool = false;
         }
 
-        // add routes
+        // Define routes
         RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
+        TwitterRouteBuilder twitterRoute = new TwitterRouteBuilder();
+        twitterRoute.setAccessToken(accessToken);
+        twitterRoute.setAccessTokenSecret(accessTokenSecret);
+        twitterRoute.setConsumerKey(consumerKey);
+        twitterRoute.setConsumerSecret(consumerSecret);
+		// route.setUser(user.getName());
+		// route.setUser("user");
+		//twitterRoute.setMessage(messageToPost);
+        
+        StringTemplateRouteBuilder stringTemplateRoute = new StringTemplateRouteBuilder();
+        //TODO set logged in user email address 
+        stringTemplateRoute.setRecipientEmail("lett.nicolas@gmail.com");
+        
+        // add routes
         context.addRoutes(senderRoute);
+		context.addRoutes(twitterRoute);
+		context.addRoutes(stringTemplateRoute);
+		
+		context.start();
 
         ProducerTemplate template = context.createProducerTemplate();
 
@@ -67,6 +96,9 @@ public class SenderController {
         context.start();
 
         template.sendBody("direct:start", post);
+        //TODO set first and last name of logged in user
+        template.send("direct:emailConfirmation",
+				createConfirmationEmail("Nicolas", "Lett", messageToPost));
 
         String statusFormToSplitter = template.requestBody("controlbus:route?routeId=formToSplitter&action=status", null, String.class);
 
@@ -87,4 +119,15 @@ public class SenderController {
     	
         return "home";
     }
+    
+    private Exchange createConfirmationEmail(String firstName, String lastName,
+			String postMessage) {
+		Exchange exchange = context
+				.getEndpoint("direct:emailConfirmation").createExchange();
+		Message msg = exchange.getIn();
+		msg.setHeader("firstName", firstName);
+		msg.setHeader("lastName", lastName);
+		msg.setBody(postMessage);
+		return exchange;
+	}
 }

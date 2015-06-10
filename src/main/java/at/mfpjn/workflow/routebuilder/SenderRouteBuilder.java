@@ -72,13 +72,6 @@ public class SenderRouteBuilder extends RouteBuilder {
                 fc.initFacebook();
                 fc.sendPost(post);
             }
-        });                
-        from("direct:twitterq").process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                System.out.println("Twitter queue: " 
-                        + exchange.getIn().getBody());
-            }
-        });
-		
+        });		
 	}
 }
