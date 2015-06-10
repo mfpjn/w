@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.Processor;
+import at.mfpjn.workflow.controller.FacebookController;
 
 public class SocMediaRouteBuilder extends RouteBuilder {
 
@@ -63,7 +64,11 @@ public class SocMediaRouteBuilder extends RouteBuilder {
         from("jms:facebookq").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 System.out.println("Facebook queue: " 
-                        + exchange.getIn().getBody());   
+                        + exchange.getIn().getBody());
+                String post = (String) exchange.getIn().getBody();
+                FacebookController fc = new FacebookController();
+                fc.initFacebook();
+                fc.sendPost(post);
             }
         });                
         from("jms:twitterq").process(new Processor() {
