@@ -63,17 +63,17 @@ public class SenderRouteBuilder extends RouteBuilder {
 		.recipientList(header("recipients"));
 		
 		// test that our route is working
-        from("direct:facebookq").process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                System.out.println("Facebook queue: " 
-                        + exchange.getIn().getBody());
-                String post = (String) exchange.getIn().getBody();
-                FacebookController fc = new FacebookController();
-                fc.initFacebook();
-                fc.sendPost(post);
-            }
-        });                
-        from("direct:twitterq").process(new Processor() {
+        from("direct:facebookq").routeId("facebookRoute").process(new Processor() {
+			public void process(Exchange exchange) throws Exception {
+				System.out.println("Facebook queue: "
+						+ exchange.getIn().getBody());
+				String post = (String) exchange.getIn().getBody();
+				FacebookController fc = new FacebookController();
+				fc.initFacebook();
+				fc.sendPost(post);
+			}
+		});
+        from("direct:twitterq").routeId("twitterRoute").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 System.out.println("Twitter queue: " 
                         + exchange.getIn().getBody());

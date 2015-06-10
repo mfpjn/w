@@ -12,6 +12,14 @@
             </div>
         </div>
         <div class="row">
+            <div class="grid-50 tece">
+                <input name="postTwitter" type="checkbox" value="y"/> Post on Twitter
+            </div>
+            <div class="grid-50 tece">
+                <input name="postFacebook" type="checkbox" value="y"/> Post on Facebook
+            </div>
+        </div>
+        <div class="row">
             <div class="grid-100">
                 <button class="button-green" type="submit">Post on Twitter!</button>
             </div>
