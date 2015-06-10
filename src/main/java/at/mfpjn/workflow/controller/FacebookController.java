@@ -25,7 +25,7 @@ public class FacebookController {
         facebook.setOAuthAppId("725656577542701",
                 "31ec413453a18aa144db8bc4dc330ace");
         facebook.setOAuthAccessToken(new AccessToken(
-                "CAAKTZBxaIii0BADL8N4lIS4OcXJ1FmUg8zECKWdeMS0FIZCpZCLNst45CALNTiJ0eRtbIfZAZCq7c9K9dZBb7JdRpSC1UZBLgYl0JKTZC6AQPzGDrlu7wq0LxEm0KVZCxrOjeOULEZBxBhCCUfmmKJrZC51OqniGpI67dcQgKHiMykuyNzUnfQk3hdt6iZCll7Prun8Kyyh6v6wDlC00zPqxLlpf",
+                "CAAKTZBxaIii0BAH1QNgqe9k7dHL3kUDC1gCZCvNROCBFdlryyRcMvmqZAQ4TgakLd9DTIUDaZAX0tSfTmcteT0E5uQBQXiKjDyqfO4G1R0kKFGQ6u4cA2b9XOK4VbPjtWnlW74woGrdKK5lXEIXWYBPhW71Khtuu2S5updeYfrmcSmxb0n85kuP06gdbMRgHA5fEMjSuqvfyFPLl7BkB",
                 null));
     }
 

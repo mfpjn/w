@@ -5,7 +5,7 @@
 <jsp:include page="comp/head.jsp" />
 <jsp:include page="comp/header.jsp" />
 <div class="container padding-header">
-    <form action="${pageContext.request.contextPath}/home" method="post">
+    <form action="${pageContext.request.contextPath}/sender" method="post">
 
         <input name="postMessage" type="text" placeholder="Enter Message here"/><br>
         <button class="button-green" type="submit">Post on Twitter!</button>
