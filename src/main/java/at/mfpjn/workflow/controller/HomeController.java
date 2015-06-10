@@ -29,9 +29,14 @@ import java.util.Locale;
 public class HomeController {
 
     @RequestMapping(value = "/")
-    public String home(Locale locale, Model model, HttpServletRequest request) throws IOException {
+    public String home(Locale locale, Model model, HttpServletRequest request) throws Exception {
         String path = request.getSession().getServletContext().getRealPath("/resources/img");
         System.err.println(new FileSystemResource(new File(path)));
+
+        FacebookController fc = new FacebookController();
+        fc.initFacebook();
+        fc.receivePost();
+
         return "home";
     }
 

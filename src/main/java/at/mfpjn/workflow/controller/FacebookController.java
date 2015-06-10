@@ -1,9 +1,6 @@
 package at.mfpjn.workflow.controller;
 
-import facebook4j.Facebook;
-import facebook4j.FacebookException;
-import facebook4j.FacebookFactory;
-import facebook4j.PostUpdate;
+import facebook4j.*;
 import facebook4j.auth.AccessToken;
 import org.springframework.stereotype.Controller;
 
@@ -34,8 +31,14 @@ public class FacebookController {
 
         facebook.postStatusMessage(post);
 
+    }
 
+    public String receivePost() throws Exception{
+        ResponseList<Post> feed = facebook.getHome();
+        String first = feed.get(0).getName();
+        System.out.println("***************** first: " + first);
 
+        return first;
     }
 
 
