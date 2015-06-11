@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import at.mfpjn.workflow.model.TwitterModel;
 import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
 import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
 import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
@@ -22,11 +23,6 @@ import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 
 @Controller
 public class SenderController {
-
-	private static String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
-	private static String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
-	private static String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
-	private static String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
 	
 	private CamelContext context;
     
@@ -67,10 +63,10 @@ public class SenderController {
 		// Define routes
         RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
         TwitterRouteBuilder twitterRoute = new TwitterRouteBuilder();
-        twitterRoute.setAccessToken(accessToken);
-        twitterRoute.setAccessTokenSecret(accessTokenSecret);
-        twitterRoute.setConsumerKey(consumerKey);
-        twitterRoute.setConsumerSecret(consumerSecret);
+        twitterRoute.setAccessToken(TwitterModel.accessToken);
+        twitterRoute.setAccessTokenSecret(TwitterModel.accessTokenSecret);
+        twitterRoute.setConsumerKey(TwitterModel.consumerKey);
+        twitterRoute.setConsumerSecret(TwitterModel.consumerSecret);
 		// route.setUser(user.getName());
 		// route.setUser("user");
 		//twitterRoute.setMessage(messageToPost);

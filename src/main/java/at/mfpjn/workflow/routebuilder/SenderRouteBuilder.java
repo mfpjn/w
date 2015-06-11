@@ -21,7 +21,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
-import at.mfpjn.workflow.controller.FacebookController;
+import at.mfpjn.workflow.model.FacebookModel;
 
 public class SenderRouteBuilder extends RouteBuilder {
 
@@ -66,7 +66,7 @@ public class SenderRouteBuilder extends RouteBuilder {
                 System.out.println("Facebook queue: " 
                         + exchange.getIn().getBody());
                 String post = (String) exchange.getIn().getBody();
-                FacebookController fc = new FacebookController();
+                FacebookModel fc = new FacebookModel();
                 fc.initFacebook();
                 fc.sendPost(post);
             }
