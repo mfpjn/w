@@ -40,7 +40,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
         boolean one = false;
 
-        if (fb) {
+        /*if (fb) {
             from("direct:facebook").
                     to("direct:receiver");
         }
@@ -48,20 +48,22 @@ public class ReceiverRouteBuilder extends RouteBuilder {
         if (tw) {
             from("direct:twitter").
                     to("direct:receiver");
-        }
+        }*/
 
 
         from("direct:receiver").
-                filter(body().contains(filterString)).
+                //filter(body().contains(filterString)).
                 process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
+
+
                     }
                 }).
                 to("direct:filter");
 
 
         // test that our route is working
-        from("direct:filter").process(new Processor() {
+        from("direct:receiver").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 System.out.println("Receiver queue: "
                         + exchange.getIn().getBody());
