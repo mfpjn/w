@@ -5,6 +5,8 @@ import facebook4j.FacebookFactory;
 import facebook4j.Post;
 import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
+import org.apache.camel.component.facebook.config.FacebookConfiguration;
+import org.apache.camel.component.facebook.FacebookComponent;
 
 /* * * * * * * * * * * * * * * * * *
  * Facebook test profile login:    *
@@ -43,6 +45,17 @@ public class FacebookModel {
         System.out.println("***************** first: " + first);
 
         return first;
+    }
+
+    public FacebookConfiguration getFbCamelConfigiration(FacebookComponent fc){
+
+        FacebookConfiguration fcon = fc.getConfiguration();
+        fcon.setOAuthAppId("725656577542701");
+        fcon.setOAuthAppSecret("31ec413453a18aa144db8bc4dc330ace");
+        fcon.setOAuthAccessToken("CAAKTZBxaIii0BABzk7mjp6nDNds1emrk7pY4VxT7248SpgI7cIZBXePQIRXZBFhTbOWikdAvbIbExp1XTCybrVlv00DY8TPlyvf6zTmXBSQdLrpQHKzMZA0UYzBG4irs4qlbgDKBn86N8zGkZA5q2LZBs57CEyuFQzZBVFu32D8xBWK2Ch92EAPDODb4ZBus7F2IaZC5zn4IPrS5e8488kbOz");
+
+
+        return fcon;
     }
 
 
