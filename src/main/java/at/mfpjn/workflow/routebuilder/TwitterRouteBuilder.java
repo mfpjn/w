@@ -17,6 +17,7 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 
 import at.mfpjn.workflow.model.TwitterModel;
@@ -154,14 +155,11 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		String endpoint = "twitter://timeline/user?" + TwitterModel.getUriTokens();
 
 		from("direct:twitterq")
-		  .setHeader("CamelTwitterKeywords", header("bar"))
-		  .to(endpoint);
-		
-//		from(endpoint).setBody().constant(message).choice()
-//				.when(body().regex(".{1,120}"))
-//				.transform(body().append(" sent via Schick-It!"))
-//				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint)
-//				.endChoice().otherwise().transform(body()).delay(1000)
-//				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
+		  .setHeader("CamelTwitterKeywords", header("bar")).setBody().constant(body()).choice()
+			.when(body().regex(".{1,120}"))
+			.transform(body().append(" sent via Schick-It!"))
+			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
+			.endChoice().otherwise().transform(body()).delay(1000)
+			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
 	}
 }
