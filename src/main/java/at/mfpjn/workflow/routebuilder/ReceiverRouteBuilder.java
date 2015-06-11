@@ -17,7 +17,6 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import at.mfpjn.workflow.controller.FacebookController;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;

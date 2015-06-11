@@ -17,10 +17,9 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+
+import at.mfpjn.workflow.model.TwitterModel;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
@@ -111,7 +110,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	}
 
 	@Override
-	public void configure() throws Exception {
+	public void configure() throws Exception {		
 		sendTweet();
 	}
 
@@ -142,9 +141,6 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	// }
 
 	public void sendTweet() {
-		// send tweet
-		//Date now = new Date();
-
 		// Tweet with Schick-it tag (length <= 120)
 		// message = "123456";
 
@@ -152,50 +148,20 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		// message =
 		// "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
-		// Message endpoint, message router, message translator, log, delay,
-		// multicast
+		// Message endpoint, message router, message translator, log, delay, multicast
 		// String endpoint = "twitter://timeline/user?" + getUriTokens();
-		//String emailConfirmation = "smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolaz@gmail.com";
 
-		message = "message to be posted 5";
+		String endpoint = "twitter://timeline/user?" + TwitterModel.getUriTokens();
 
-		from("direct:twitterq").process(new Processor() {
-			public void process(Exchange exchange) throws Exception {
-				updateMessage("if you see this, you're good");
-				// message = (String) exchange.getIn().getBody();
-				System.out.println("Twitter queue: "
-						+ exchange.getIn().getBody());
-			}
-		});
-		// System.out.println("============================================= Message value = "
-		// + message);
-
-		String endpoint = "twitter://timeline/user?" + getUriTokens();
-
-		from(endpoint).setBody().constant(message).choice()
-				.when(body().regex(".{1,120}"))
-				.transform(body().append(" sent via Schick-It!"))
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint)
-				.endChoice().otherwise().transform(body()).delay(1000)
-				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
-
-		// from("direct:foo").setBody().constant(message).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
-		// String subject = "subject";
-		// from("direct:a").setHeader("subject",
-		// constant(subject)).to("smtps://smtp.gmail.com?username=andatu7@gmail.com&password=andatuASE&to=lett.nicolas@gmail.com");
-
-		// from("direct:a").to("string-template:templates/email.tm").to(emailConfirmation);
+		from("direct:twitterq")
+		  .setHeader("CamelTwitterKeywords", header("bar"))
+		  .to(endpoint);
+		
+//		from(endpoint).setBody().constant(message).choice()
+//				.when(body().regex(".{1,120}"))
+//				.transform(body().append(" sent via Schick-It!"))
+//				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint)
+//				.endChoice().otherwise().transform(body()).delay(1000)
+//				.log(LoggingLevel.INFO, "Tweeting: " + message).to(endpoint);
 	}
-
-	protected void updateMessage(String string) {
-		this.message = string;
-
-	}
-
-	protected String getUriTokens() {
-		return "consumerKey=" + consumerKey + "&consumerSecret="
-				+ consumerSecret + "&accessToken=" + accessToken
-				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
-	}
-
 }

@@ -1,6 +1,4 @@
-package at.mfpjn.workflow.controller;
-
-import org.springframework.stereotype.Controller;
+package at.mfpjn.workflow.model;
 
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
@@ -14,12 +12,11 @@ import facebook4j.auth.AccessToken;
  * password: testemail             *
  * * * * * * * * * * * * * * * * * */
 
-@Controller
-public class FacebookController {
+public class FacebookModel {
 
     private Facebook facebook;
 
-    public FacebookController() {
+    public FacebookModel() {
     }
 
     public void initFacebook() {

@@ -1,21 +1,16 @@
 package at.mfpjn.workflow.controller;
 
-import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
-import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.jms.ConnectionFactory;
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import at.mfpjn.workflow.model.FacebookModel;
+import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
 
 
 @Controller
@@ -29,7 +24,7 @@ public class ReceiverController {
         CamelContext context = new DefaultCamelContext();
 
         // get post
-        FacebookController fc = new FacebookController();
+        FacebookModel fc = new FacebookModel();
         fc.initFacebook();
         String receivedPost = fc.receivePost();
 
