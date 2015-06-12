@@ -17,46 +17,42 @@ import org.apache.camel.component.facebook.FacebookComponent;
 public class FacebookModel {
 
     private Facebook facebook;
+    private String appId;
+    private String appSecret;
+    private String accessToken;
 
     public FacebookModel() {
+        this.appId = "725656577542701";
+        this.appSecret = "31ec413453a18aa144db8bc4dc330ace";
+
+        /***** enter access token here: *****/
+        this.accessToken = "CAAKTZBxaIii0BADgqzOojkaAT7tqCcIJQZBQo5N3ZAirbCROUpzRqyXb32W7LZCbZCElK7az6joHQTYpD1V1v9YN27L1NdIpKnwoXWeKFsdo7T9fnwWRXbZCpkffbJJ9uZAf81dpa05GuxYinBHHLnxNAI2DZBm5Lp06y9dJTuq6XBBgwBt8hunlpS7tF9lj0a67uzKzZAfeRJvZCO7hMHHgev";
+        /************************************/
     }
 
-    public void initFacebook() {
-        System.out.println("**************in initFacebook");
-        facebook = new FacebookFactory().getInstance();
+    public void setFb4jConfiguration() {
 
-        facebook.setOAuthAppId("725656577542701",
-                "31ec413453a18aa144db8bc4dc330ace");
+        facebook = new FacebookFactory().getInstance();
+        facebook.setOAuthAppId(appId,
+                appSecret);
         facebook.setOAuthAccessToken(new AccessToken(
-                "CAAKTZBxaIii0BAORVI9rjrBbKbYAGZCB2VTsmVXyZBuRG9mSO3lcp7ElxavpqARWNrKiLB8o6w1pfzrlr0snQfnjwsHGelHG3WnK5cwmd70s6qlkkU5GKYPSZCK3r0LPhj7ZCrvJQQR3KZC55NYvwyIdQ2K8BaAvkm3DmyZBXurMt88f5rjhbBRXNvwqxZARMsKNdnzXPjnCjsrZA3DviN6VM",
-                null));
+                accessToken,null));
+    }
+
+    public void setFbCamelConfiguration(FacebookComponent fc){
+
+        FacebookConfiguration fcon = fc.getConfiguration();
+        fcon.setOAuthAppId(appId);
+        fcon.setOAuthAppSecret(appSecret);
+        fcon.setOAuthAccessToken(accessToken);
     }
 
     public void sendPost(String post) throws Exception{
-        System.out.println("**************in sendPost");
 
         facebook.postStatusMessage(post);
-
     }
 
-    public String receivePost() throws Exception{
-        ResponseList<Post> feed = facebook.getHome();
-        String first = feed.get(0).getName();
-        System.out.println("***************** first: " + first);
 
-        return first;
-    }
-
-    public FacebookConfiguration getFbCamelConfigiration(FacebookComponent fc){
-
-        FacebookConfiguration fcon = fc.getConfiguration();
-        fcon.setOAuthAppId("725656577542701");
-        fcon.setOAuthAppSecret("31ec413453a18aa144db8bc4dc330ace");
-        fcon.setOAuthAccessToken("CAAKTZBxaIii0BABzk7mjp6nDNds1emrk7pY4VxT7248SpgI7cIZBXePQIRXZBFhTbOWikdAvbIbExp1XTCybrVlv00DY8TPlyvf6zTmXBSQdLrpQHKzMZA0UYzBG4irs4qlbgDKBn86N8zGkZA5q2LZBs57CEyuFQzZBVFu32D8xBWK2Ch92EAPDODb4ZBus7F2IaZC5zn4IPrS5e8488kbOz");
-
-
-        return fcon;
-    }
 
 
 

@@ -51,7 +51,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
         }*/
 
 
-        from("direct:receiver").
+/*        from("direct:receiver").
                 //filter(body().contains(filterString)).
                 process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
@@ -59,7 +59,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
                     }
                 }).
-                to("direct:filter");
+                to("direct:filter");*/
 
 
         // test that our route is working
@@ -67,6 +67,8 @@ public class ReceiverRouteBuilder extends RouteBuilder {
             public void process(Exchange exchange) throws Exception {
                 System.out.println("Receiver queue: "
                         + exchange.getIn().getBody());
+                String custom = exchange.getIn().getBody(String.class);
+                exchange.getIn().setBody(custom);
             }
         }).to("file:reports");
 
