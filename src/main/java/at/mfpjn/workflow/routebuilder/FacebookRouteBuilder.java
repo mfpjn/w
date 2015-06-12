@@ -18,6 +18,8 @@ package at.mfpjn.workflow.routebuilder;
  */
 
 import at.mfpjn.workflow.model.TwitterModel;
+import facebook4j.Post;
+import facebook4j.internal.org.json.JSONObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -47,12 +49,16 @@ public class FacebookRouteBuilder extends RouteBuilder {
                 .process(new Processor() {
                     public void process(Exchange exchange)
                             throws Exception {
-                        System.out.println("We just downloaded: ");
-                        String custom = exchange.getIn().getBody(
-                                String.class);
-                        System.out.println("custom: " + custom);
+
+                        Post post = exchange.getIn().getBody(Post.class);
+                        String message = post.getMessage();
+                        exchange.getIn().setBody(message);
+                        exchange.getIn().setHeader("FacebookPost", header("fb"));
+
+                        System.out.println("We just downloaded: " + message);
+
                     }
-                }).to("direct:receiver");
+                }).to("direct:filter");
 	}
 
 

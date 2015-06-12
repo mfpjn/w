@@ -26,7 +26,7 @@ public class FacebookModel {
         this.appSecret = "31ec413453a18aa144db8bc4dc330ace";
 
         /***** enter access token here: *****/
-        this.accessToken = "CAAKTZBxaIii0BADgqzOojkaAT7tqCcIJQZBQo5N3ZAirbCROUpzRqyXb32W7LZCbZCElK7az6joHQTYpD1V1v9YN27L1NdIpKnwoXWeKFsdo7T9fnwWRXbZCpkffbJJ9uZAf81dpa05GuxYinBHHLnxNAI2DZBm5Lp06y9dJTuq6XBBgwBt8hunlpS7tF9lj0a67uzKzZAfeRJvZCO7hMHHgev";
+        this.accessToken = "CAAKTZBxaIii0BAOdb7FOpAeu4XNbG7HyVdqJ9FZAATFkMRd8ZCnkReIZArtZC0xc2y7KlZBYBBF24rqH406a84S8DgmgSfYVh9ZCuRRj87YOR69GqKC9XDEwhoRRYxz3M1oxvKLMVDumqypAuNnnHTIcdpKtjme1u7ph31PWUQXLaQb5lnnehueQETAZAn5BMZADltXl5inmGQt5xFBmhd1s1";
         /************************************/
     }
 
