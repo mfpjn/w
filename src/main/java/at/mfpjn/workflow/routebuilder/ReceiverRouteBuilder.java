@@ -1,6 +1,7 @@
 package at.mfpjn.workflow.routebuilder;
 
 
+import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -24,7 +25,11 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
 
         from("direct:filter").
-                filter(body().contains(filterString)).
+                //filter(body().contains(filterString)).
+                to("direct:agg");
+
+        from("direct:agg").
+                aggregate(header("FacebookPost"), new ReceiverAggregationStrategy()).completionTimeout(1000).
                 to("direct:recipient");
 
         from("direct:recipient").
