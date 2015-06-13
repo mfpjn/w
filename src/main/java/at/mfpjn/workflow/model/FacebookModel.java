@@ -42,4 +42,12 @@ public class FacebookModel {
 
 		facebook.postStatusMessage(post);
 	}
+
+    public void setFb4jConfiguration() {
+
+        facebook = new FacebookFactory().getInstance();
+        facebook.setOAuthAppId(appId, appSecret);
+        facebook.setOAuthAccessToken(new AccessToken(accessToken,null));
+    }
 }
+
