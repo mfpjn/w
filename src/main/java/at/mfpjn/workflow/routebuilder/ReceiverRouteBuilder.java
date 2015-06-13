@@ -25,9 +25,19 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 		// filter(body().contains(filterString)).
 				to("direct:agg");
 
+		//
+		// from("direct:receiver").
+		// //filter(body().contains(filterString)).
+		// process(new Processor() {
+		// public void process(Exchange exchange) throws Exception {
+		//
+		//
+		// }
+		// }).
+		// to("direct:filter");
 
 		from("direct:agg")
-				.aggregate(header("FacebookPost"),
+				.aggregate(header("SocialNetwork"),
 						new ReceiverAggregationStrategy())
 				.completionTimeout(1000).to("direct:recipient");
 

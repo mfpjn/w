@@ -25,6 +25,12 @@ import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 public class SenderController {
 	
 	private CamelContext context;
+	
+	//TODO replace with DB call
+	private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
+	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
+	private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
+	private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";	
     
     @RequestMapping(value = "/sender", method = RequestMethod.POST)
     public String sender(HttpServletRequest request) throws Exception {
@@ -59,14 +65,14 @@ public class SenderController {
         }else{
             twitterBool = false;
         }
-
+        
 		// Define routes
         RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
         TwitterRouteBuilder twitterRoute = new TwitterRouteBuilder();
-        twitterRoute.setAccessToken(TwitterModel.accessToken);
-        twitterRoute.setAccessTokenSecret(TwitterModel.accessTokenSecret);
-        twitterRoute.setConsumerKey(TwitterModel.consumerKey);
-        twitterRoute.setConsumerSecret(TwitterModel.consumerSecret);
+        twitterRoute.setAccessToken(accessToken);
+        twitterRoute.setAccessTokenSecret(accessTokenSecret);
+        twitterRoute.setConsumerKey(consumerKey);
+        twitterRoute.setConsumerSecret(consumerSecret);
 		// route.setUser(user.getName());
 		// route.setUser("user");
 		//twitterRoute.setMessage(messageToPost);

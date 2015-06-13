@@ -25,6 +25,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
+import twitter4j.Status;
+import twitter4j.Twitter;
 import at.mfpjn.workflow.model.TwitterModel;
 
 /**
@@ -33,12 +35,76 @@ import at.mfpjn.workflow.model.TwitterModel;
  */
 public class TwitterReceiverRouteBuilder extends RouteBuilder {
 
-	@Override
-	public void configure() throws Exception {
-		 // poll twitter search for new tweets
-//		from("twitter://timeline/home?type=polling&delay=5&consumerKey=" + TwitterModel.consumerKey + "&consumerSecret=" + TwitterModel.consumerSecret + "&accessToken=" + TwitterModel.accessToken + "&accessTokenSecret=" + TwitterModel.accessTokenSecret)
-//		  .to("direct:receiver");
+	private String user;
+	private String consumerKey;
+	private String consumerSecret;
+	private String accessToken;
+	private String accessTokenSecret;
+	
+	public String getConsumerKey() {
+		return consumerKey;
 	}
 
+	public void setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
+	}
+
+	public String getConsumerSecret() {
+		return consumerSecret;
+	}
+
+	public void setConsumerSecret(String consumerSecret) {
+		this.consumerSecret = consumerSecret;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getAccessTokenSecret() {
+		return accessTokenSecret;
+	}
+
+	public void setAccessTokenSecret(String accessTokenSecret) {
+		this.accessTokenSecret = accessTokenSecret;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	@Override
+	public void configure() throws Exception {
+		
+		
+		// poll twitter search for new tweets
+		from(
+				"twitter://timeline/user?type=polling&delay=99999&consumerKey="
+						+ consumerKey + "&consumerSecret="
+						+ consumerSecret + "&accessToken="
+						+ accessToken + "&accessTokenSecret="
+						+ accessTokenSecret + "&user=" + user).process(
+				new Processor() {
+					public void process(Exchange exchange) throws Exception {
+
+						Status status = exchange.getIn().getBody(Status.class);
+
+						String message = status.getText();
+						exchange.getIn().setBody(message);
+						exchange.getIn().setHeader("SocialNetwork", header("tw"));
+
+						System.out.println("We just downloaded: " + message);
+
+					}
+				}).to("direct:filter");
+	}
 
 }

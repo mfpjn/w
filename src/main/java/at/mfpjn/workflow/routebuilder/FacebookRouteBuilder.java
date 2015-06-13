@@ -39,7 +39,7 @@ public class FacebookRouteBuilder extends RouteBuilder {
 
                         String message = post.getMessage();
                         exchange.getIn().setBody(message);
-                        exchange.getIn().setHeader("FacebookPost", header("fb"));
+                        exchange.getIn().setHeader("SocialNetwork", header("fb"));
 
                         System.out.println("We just downloaded: " + message);
 

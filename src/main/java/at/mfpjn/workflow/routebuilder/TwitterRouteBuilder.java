@@ -21,12 +21,6 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.twitter.TwitterComponent;
 
-import at.mfpjn.workflow.model.TwitterModel;
-
-/**
- * A Camel route that updates from twitter all tweets using having the search
- * term. And post the changes to web-socket, that can be viewed from a web page
- */
 public class TwitterRouteBuilder extends RouteBuilder {
 
 	private int port;
@@ -137,7 +131,9 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		// Message endpoint, message router, message translator, log, delay, multicast
 		// String endpoint = "twitter://timeline/user?" + getUriTokens();
 
-		String endpoint = "twitter://timeline/user?" + TwitterModel.getUriTokens();
+		String endpoint = "twitter://timeline/user?" + "consumerKey=" + consumerKey + "&consumerSecret="
+				+ consumerSecret + "&accessToken=" + accessToken
+				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
 
 		from("direct:twitterq")
 		  .setHeader("CamelTwitterKeywords", header("bar")).choice()
