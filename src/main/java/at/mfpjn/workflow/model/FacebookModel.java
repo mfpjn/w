@@ -28,7 +28,7 @@ public class FacebookModel {
         facebook.setOAuthAppId("725656577542701",
                 "31ec413453a18aa144db8bc4dc330ace");
         facebook.setOAuthAccessToken(new AccessToken(
-                "CAAKTZBxaIii0BAORVI9rjrBbKbYAGZCB2VTsmVXyZBuRG9mSO3lcp7ElxavpqARWNrKiLB8o6w1pfzrlr0snQfnjwsHGelHG3WnK5cwmd70s6qlkkU5GKYPSZCK3r0LPhj7ZCrvJQQR3KZC55NYvwyIdQ2K8BaAvkm3DmyZBXurMt88f5rjhbBRXNvwqxZARMsKNdnzXPjnCjsrZA3DviN6VM",
+                "CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD",
                 null));
     }
 
@@ -52,7 +52,7 @@ public class FacebookModel {
         FacebookConfiguration fcon = fc.getConfiguration();
         fcon.setOAuthAppId("725656577542701");
         fcon.setOAuthAppSecret("31ec413453a18aa144db8bc4dc330ace");
-        fcon.setOAuthAccessToken("CAAKTZBxaIii0BABzk7mjp6nDNds1emrk7pY4VxT7248SpgI7cIZBXePQIRXZBFhTbOWikdAvbIbExp1XTCybrVlv00DY8TPlyvf6zTmXBSQdLrpQHKzMZA0UYzBG4irs4qlbgDKBn86N8zGkZA5q2LZBs57CEyuFQzZBVFu32D8xBWK2Ch92EAPDODb4ZBus7F2IaZC5zn4IPrS5e8488kbOz");
+        fcon.setOAuthAccessToken("CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD");
 
 
         return fcon;

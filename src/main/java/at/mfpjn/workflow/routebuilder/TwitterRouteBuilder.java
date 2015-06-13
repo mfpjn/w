@@ -19,6 +19,7 @@ package at.mfpjn.workflow.routebuilder;
 
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.twitter.TwitterComponent;
 
 import at.mfpjn.workflow.model.TwitterModel;
 
@@ -123,23 +124,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 	// wc.setPort(port);
 	// // we can serve static resources from the classpath: or file: system
 	// wc.setStaticResources("classpath:.");
-	//
-	// // setup Twitter component
-	// TwitterComponent tc = getContext().getComponent("twitter",
-	// TwitterComponent.class);
-	// tc.setAccessToken(accessToken);
-	// tc.setAccessTokenSecret(accessTokenSecret);
-	// tc.setConsumerKey(consumerKey);
-	// tc.setConsumerSecret(consumerSecret);
-	//
-	// // poll twitter search for new tweets
-	// fromF("twitter://search?type=polling&delay=%s&keywords=%s", delay,
-	// searchTerm)
-	// .to("log:tweet")
-	// // and push tweets to all web socket subscribers on camel-tweet
-	// .to("websocket:camel-tweet?sendToAll=true");
-	// System.out.println("AOK!");
-	// }
+	//}
 
 	public void sendTweet() {
 		// Tweet with Schick-it tag (length <= 120)
@@ -147,7 +132,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 
 		// Tweet without Schick-it tag (length > 120)
 		// message =
-		// "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
+		// "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
 		// Message endpoint, message router, message translator, log, delay, multicast
 		// String endpoint = "twitter://timeline/user?" + getUriTokens();
@@ -155,11 +140,20 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		String endpoint = "twitter://timeline/user?" + TwitterModel.getUriTokens();
 
 		from("direct:twitterq")
-		  .setHeader("CamelTwitterKeywords", header("bar")).setBody().constant(body()).choice()
+		  .setHeader("CamelTwitterKeywords", header("bar")).choice()
 			.when(body().regex(".{1,120}"))
 			.transform(body().append(" sent via Schick-It!"))
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
-			.endChoice().otherwise().transform(body()).delay(1000)
+			.endChoice()
+			.otherwise().transform(body()).delay(1000)
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
+		
+		 // setup Twitter component
+		 TwitterComponent tc = getContext().getComponent("twitter",
+		 TwitterComponent.class);
+		 tc.setAccessToken(accessToken);
+		 tc.setAccessTokenSecret(accessTokenSecret);
+		 tc.setConsumerKey(consumerKey);
+		 tc.setConsumerSecret(consumerSecret);
 	}
 }

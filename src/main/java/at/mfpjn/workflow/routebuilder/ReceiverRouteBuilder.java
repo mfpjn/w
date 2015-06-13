@@ -50,16 +50,16 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                     to("direct:receiver");
         }*/
 
-
-        from("direct:receiver").
-                //filter(body().contains(filterString)).
-                process(new Processor() {
-                    public void process(Exchange exchange) throws Exception {
-
-
-                    }
-                }).
-                to("direct:filter");
+//
+//        from("direct:receiver").
+//                //filter(body().contains(filterString)).
+//                process(new Processor() {
+//                    public void process(Exchange exchange) throws Exception {
+//
+//
+//                    }
+//                }).
+//                to("direct:filter");
 
 
         // test that our route is working

@@ -2,18 +2,18 @@ package at.mfpjn.workflow.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
 import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.facebook.FacebookComponent;
+import org.apache.camel.component.facebook.config.FacebookConfiguration;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.apache.camel.component.facebook.FacebookComponent;
-import org.apache.camel.component.facebook.config.FacebookConfiguration;
 
 import at.mfpjn.workflow.model.FacebookModel;
+import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
 import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterReceiverRouteBuilder;
 
 
 @Controller
@@ -34,6 +34,7 @@ public class ReceiverController {
 
         // add routes
         RouteBuilder facebookRoute = new FacebookRouteBuilder();
+        TwitterReceiverRouteBuilder twitterReceiverRoute = new TwitterReceiverRouteBuilder();
         RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
         context.addRoutes(facebookRoute);
         context.addRoutes(receiverRoute);
