@@ -1,12 +1,9 @@
 package at.mfpjn.workflow.model;
 
-import facebook4j.Facebook;
-import facebook4j.FacebookFactory;
-import facebook4j.Post;
-import facebook4j.ResponseList;
-import facebook4j.auth.AccessToken;
-import org.apache.camel.component.facebook.config.FacebookConfiguration;
 import org.apache.camel.component.facebook.FacebookComponent;
+import org.apache.camel.component.facebook.config.FacebookConfiguration;
+
+import facebook4j.Facebook;
 
 /* * * * * * * * * * * * * * * * * *
  * Facebook test profile login:    *

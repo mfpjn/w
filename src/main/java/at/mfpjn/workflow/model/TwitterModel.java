@@ -1,16 +1,5 @@
 package at.mfpjn.workflow.model;
 
-import facebook4j.Facebook;
-import facebook4j.FacebookFactory;
-import facebook4j.Post;
-import facebook4j.ResponseList;
-import facebook4j.auth.AccessToken;
-
-/* * * * * * * * * * * * * * * * * *
- * Facebook test profile login:    *
- * username: j20150505@gmail.com   *
- * password: testemail             *
- * * * * * * * * * * * * * * * * * */
 
 public class TwitterModel {
 
