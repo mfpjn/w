@@ -1,5 +1,7 @@
 package at.mfpjn.workflow.model;
 
+import facebook4j.FacebookFactory;
+import facebook4j.auth.AccessToken;
 import org.apache.camel.component.facebook.FacebookComponent;
 import org.apache.camel.component.facebook.config.FacebookConfiguration;
 
