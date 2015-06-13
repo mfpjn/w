@@ -72,6 +72,8 @@
 
 	</bean>
 
+	<bean class="at.mfpjn.workflow.model.Transform" id="partner"/>
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="exceptionTranslator"

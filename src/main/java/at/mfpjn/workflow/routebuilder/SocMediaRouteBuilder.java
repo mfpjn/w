@@ -24,6 +24,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.Processor;
 
+import com.sun.xml.bind.v2.model.core.Ref;
+
 public class SocMediaRouteBuilder extends RouteBuilder {
 
 	public boolean fb;
@@ -42,7 +44,7 @@ public class SocMediaRouteBuilder extends RouteBuilder {
 	public void configure() throws Exception{
 		
 		
-		from("jms:messages").
+		from("jms:messages").wireTap("jms:postAudit"). //added wiretap
 		process(new Processor() {
 			public void process(Exchange exchange) throws Exception {
 				System.out.println("Message in RecipList: " + exchange.getIn().getBody());
@@ -71,6 +73,11 @@ public class SocMediaRouteBuilder extends RouteBuilder {
                         + exchange.getIn().getBody());   
             }
         });
-		
+		from("jms:postAudit").process(new Processor(){
+			public void process(Exchange exchange) throws Exception{
+				System.out.println("Wonder whats here: " + exchange.getIn().getBody());
+			}
+		});
+		from("jms:postAudit").bean(method("partner", "tosql")).to("jdbc:dataSource");
 	}
 }
