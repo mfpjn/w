@@ -40,7 +40,25 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
+	private Boolean filter;
+	private Boolean aggregate;
 	
+	public Boolean getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
+	
+	public Boolean getAggregate() {
+		return aggregate;
+	}
+
+	public void setAggregate(Boolean aggregate) {
+		this.aggregate = aggregate;
+	}
+
 	public String getConsumerKey() {
 		return consumerKey;
 	}
@@ -101,6 +119,8 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 						String message = status.getText();
 						exchange.getIn().setBody(message);
 						exchange.getIn().setHeader("SocialNetwork", header("tw"));
+						exchange.getIn().setHeader("Filter", false);
+						exchange.getIn().setHeader("Aggregate", true);
 
                         // set filename
                         String filename = "TwitterPost-" + status.getId();

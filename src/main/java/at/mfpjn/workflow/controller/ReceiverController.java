@@ -52,9 +52,12 @@ public class ReceiverController {
         twitterReceiverRoute.setAccessToken(accessToken);
         twitterReceiverRoute.setAccessTokenSecret(accessTokenSecret);
         twitterReceiverRoute.setUser(userName);
+        //TODO set values from interface
+        twitterReceiverRoute.setFilter(true);
+        twitterReceiverRoute.setAggregate(true);
         
         RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
-        context.addRoutes(facebookRoute);
+        //context.addRoutes(facebookRoute);
         context.addRoutes(twitterReceiverRoute);
         context.addRoutes(receiverRoute);
 
@@ -68,9 +71,9 @@ public class ReceiverController {
 
         context = new DefaultCamelContext();
 
-        RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
-        context.addRoutes(ftpRouteBuilder);
-        context.start();
+//        RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
+//        context.addRoutes(ftpRouteBuilder);
+//        context.start();
 
         Thread.sleep(20000);
 
