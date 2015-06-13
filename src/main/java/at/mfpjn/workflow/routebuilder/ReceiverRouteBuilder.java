@@ -5,6 +5,11 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
+import org.joda.time.DateTime;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReceiverRouteBuilder extends RouteBuilder {
 
@@ -25,21 +30,32 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 		// filter(body().contains(filterString)).
 				to("direct:agg");
 
-		//
-		// from("direct:receiver").
-		// //filter(body().contains(filterString)).
-		// process(new Processor() {
-		// public void process(Exchange exchange) throws Exception {
-		//
-		//
-		// }
-		// }).
-		// to("direct:filter");
 
 		from("direct:agg")
 				.aggregate(header("SocialNetwork"),
-						new ReceiverAggregationStrategy())
-				.completionTimeout(1000).to("direct:recipient");
+                        new ReceiverAggregationStrategy())
+				.completionTimeout(1000)
+                .process(new Processor() {
+                    public void process(Exchange exchange)
+                            throws Exception {
+
+
+                        Date date = new Date() ;
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd_hh-mm-ss");
+                        String datetime = dateFormat.format(date);
+
+                        String filename;
+                        String header = exchange.getIn().getHeader("SocialNetwork").toString();
+                        if (header.equals("fb")) {
+                            filename = "FacebookAggregatedPosts-" + datetime;
+                        } else {
+                            filename = "TwitterAggregatedPosts-" + datetime;
+                        }
+                        exchange.getIn().setHeader("CamelFileName", constant(filename));
+
+                    }
+                })
+                .to("direct:recipient");
 
 		from("direct:recipient").process(new Processor() {
 			public void process(Exchange exchange) throws Exception {

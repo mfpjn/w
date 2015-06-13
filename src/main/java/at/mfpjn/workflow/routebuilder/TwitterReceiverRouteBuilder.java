@@ -97,11 +97,14 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 
 						Status status = exchange.getIn().getBody(Status.class);
 
+                        // get message
 						String message = status.getText();
 						exchange.getIn().setBody(message);
 						exchange.getIn().setHeader("SocialNetwork", header("tw"));
 
-						System.out.println("We just downloaded: " + message);
+                        // set filename
+                        String filename = "TwitterPost-" + status.getId();
+                        exchange.getIn().setHeader("CamelFileName", constant(filename));
 
 					}
 				}).to("direct:filter");

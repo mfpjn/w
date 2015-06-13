@@ -2,6 +2,7 @@ package at.mfpjn.workflow.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import at.mfpjn.workflow.routebuilder.FacebookReceiverRouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.facebook.FacebookComponent;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import twitter4j.TwitterException;
 import at.mfpjn.workflow.model.FacebookModel;
 import at.mfpjn.workflow.model.TwitterModel;
-import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
 import at.mfpjn.workflow.routebuilder.FtpRouteBuilder;
 import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
 import at.mfpjn.workflow.routebuilder.TwitterReceiverRouteBuilder;
@@ -41,7 +41,7 @@ public class ReceiverController {
         fm.setFbCamelConfiguration(fc);
 
         // add routes
-        RouteBuilder facebookRoute = new FacebookRouteBuilder();
+        RouteBuilder facebookRoute = new FacebookReceiverRouteBuilder();
         
         String userName = getTwitterUserName();
         

@@ -17,7 +17,7 @@ import org.apache.camel.Processor;
  * A Camel route that updates from twitter all tweets using having the search
  * term. And post the changes to web-socket, that can be viewed from a web page
  */
-public class FacebookRouteBuilder extends RouteBuilder {
+public class FacebookReceiverRouteBuilder extends RouteBuilder {
 
     String FACEBOOK_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
@@ -37,11 +37,14 @@ public class FacebookRouteBuilder extends RouteBuilder {
 
                         Post post = exchange.getIn().getBody(Post.class);
 
+                        // get message
                         String message = post.getMessage();
                         exchange.getIn().setBody(message);
                         exchange.getIn().setHeader("SocialNetwork", header("fb"));
 
-                        System.out.println("We just downloaded: " + message);
+                        // set filename
+                        String filename = "FacebookPost-" + post.getId();
+                        exchange.getIn().setHeader("CamelFileName", constant(filename));
 
                     }
                 }).to("direct:filter");
