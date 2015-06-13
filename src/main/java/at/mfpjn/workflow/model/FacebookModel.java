@@ -16,48 +16,48 @@ import org.apache.camel.component.facebook.FacebookComponent;
 
 public class FacebookModel {
 
-    private Facebook facebook;
+	private Facebook facebook;
+	private String appId;
+	private String appSecret;
+	private String accessToken;
 
-    public FacebookModel() {
-    }
+	public FacebookModel() {
+		this.appId = "725656577542701";
+		this.appSecret = "31ec413453a18aa144db8bc4dc330ace";
 
-    public void initFacebook() {
-        System.out.println("**************in initFacebook");
-        facebook = new FacebookFactory().getInstance();
+		/***** enter access token here: *****/
+		this.accessToken = "CAAKTZBxaIii0BAC5ZAjBRbQpBtInjPWZAIX5RNA8nTikYHzIPpErSXdhFZAXRKKZAHR1LFB6vjUNikth58GHfb0Ue8ZBlbTaJHY10YLdDmfypRXqYqD6Y0bHavClK6L2WG0ZCa2eCNeBEiJDWLDVVg6zJA2vrh5Qm21kW14FBkdp9NXkaPCYdAfhU88a3bqPAOnxbce1pHMMPzJjvFs1hKn";
+		/************************************/
+	}
 
-        facebook.setOAuthAppId("725656577542701",
-                "31ec413453a18aa144db8bc4dc330ace");
-        facebook.setOAuthAccessToken(new AccessToken(
-                "CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD",
-                null));
-    }
+	public void setFb4jConfiguration() {
 
-    public void sendPost(String post) throws Exception{
-        System.out.println("**************in sendPost");
+		facebook = new FacebookFactory().getInstance();
+		facebook.setOAuthAppId(appId, appSecret);
+		facebook.setOAuthAccessToken(new AccessToken(
+				"CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD",
+				null));
 
-        facebook.postStatusMessage(post);
+	}
 
-    }
+	public void setFbCamelConfiguration(FacebookComponent fc) {
 
-    public String receivePost() throws Exception{
-        ResponseList<Post> feed = facebook.getHome();
-        String first = feed.get(0).getName();
-        System.out.println("***************** first: " + first);
+		FacebookConfiguration fcon = fc.getConfiguration();
+		fcon.setOAuthAppId(appId);
+		fcon.setOAuthAppSecret(appSecret);
+		fcon.setOAuthAccessToken(accessToken);
+	}
 
-        return first;
-    }
+	public void sendPost(String post) throws Exception {
 
-    public FacebookConfiguration getFbCamelConfigiration(FacebookComponent fc){
+		facebook.postStatusMessage(post);
+	}
 
-        FacebookConfiguration fcon = fc.getConfiguration();
-        fcon.setOAuthAppId("725656577542701");
-        fcon.setOAuthAppSecret("31ec413453a18aa144db8bc4dc330ace");
-        fcon.setOAuthAccessToken("CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD");
-
-
-        return fcon;
-    }
-
-
-
+//	public FacebookConfiguration getFbCamelConfigiration(FacebookComponent fc) {
+//
+//		FacebookConfiguration fcon = fc.getConfiguration();
+//		fcon.setOAuthAppId("725656577542701");
+//		fcon.setOAuthAppSecret("31ec413453a18aa144db8bc4dc330ace");
+//		fcon.setOAuthAccessToken("CAAKTZBxaIii0BALTiRfakIAjomecW3E8NyN7uWV6bt8cRr5CixMHGDWPYwZAVsK4ksXJuPXj7xhLYxI8EZC8UVOi2BqgW4Hn67BpFk31ZAvybO5o0KgQgx9KxgNTgGLHN5SppP0YzuSOZCdMVsFqCbFubve9Th5cbgineSHy2Kh2ubmAOF5dknJCgQnirjQzVtDz4A5PZBOQ8eS8rQSwZBqQDMjr8CXsi4ZD");
+//	}
 }

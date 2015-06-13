@@ -1,76 +1,64 @@
 package at.mfpjn.workflow.routebuilder;
 
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
+import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
+
 public class ReceiverRouteBuilder extends RouteBuilder {
 
-    public boolean fb;
-    public boolean tw;
-    public String filterString;
+	public boolean fileBool;
+	public boolean tw;
+	public String filterString;
 
+	public ReceiverRouteBuilder(boolean fileBool, boolean tw, String fs) {
+		super();
+		this.fileBool = fileBool;
+		this.tw = tw;
+		this.filterString = fs;
+	}
 
-    public ReceiverRouteBuilder(boolean fb, boolean tw, String fs) {
-        super();
-        this.fb = fb;
-        this.tw = tw;
-        this.filterString = fs;
-    }
+	public void configure() throws Exception {
 
+		from("direct:filter").
+		// filter(body().contains(filterString)).
+				to("direct:agg");
 
-    public void configure() throws Exception {
+		//
+		// from("direct:receiver").
+		// //filter(body().contains(filterString)).
+		// process(new Processor() {
+		// public void process(Exchange exchange) throws Exception {
+		//
+		//
+		// }
+		// }).
+		// to("direct:filter");
 
-        boolean one = false;
+		from("direct:agg")
+				.aggregate(header("FacebookPost"),
+						new ReceiverAggregationStrategy())
+				.completionTimeout(1000).to("direct:recipient");
 
-        /*if (fb) {
-            from("direct:facebook").
-                    to("direct:receiver");
-        }
+		from("direct:recipient").process(new Processor() {
+			public void process(Exchange exchange) throws Exception {
+				String recipients = "";
+				if (fileBool == true) {
+					recipients += "direct:save2file";
+				}
+				exchange.getIn().setHeader("recipients", recipients);
+			}
+		}).recipientList(header("recipients"));
 
-        if (tw) {
-            from("direct:twitter").
-                    to("direct:receiver");
-        }*/
+		// test that our route is working
+		from("direct:save2file").process(new Processor() {
+			public void process(Exchange exchange) throws Exception {
+				System.out.println("Saving to file: "
+						+ exchange.getIn().getBody());
 
-//
-//        from("direct:receiver").
-//                //filter(body().contains(filterString)).
-//                process(new Processor() {
-//                    public void process(Exchange exchange) throws Exception {
-//
-//
-//                    }
-//                }).
-//                to("direct:filter");
+			}
+		}).to("file:reports");
 
-
-        // test that our route is working
-        from("direct:receiver").process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                System.out.println("Receiver queue: "
-                        + exchange.getIn().getBody());
-            }
-        }).to("file:reports");
-
-
-
-    }
+	}
 }

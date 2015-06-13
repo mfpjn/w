@@ -67,7 +67,7 @@ public class SenderRouteBuilder extends RouteBuilder {
                         + exchange.getIn().getBody());
                 String post = (String) exchange.getIn().getBody();
                 FacebookModel fc = new FacebookModel();
-                fc.initFacebook();
+                fc.setFb4jConfiguration();
                 fc.sendPost(post);
             }
         });	
