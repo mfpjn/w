@@ -403,8 +403,6 @@ div[class*="grid"] {
 
 /* Forms */
 input, select, textarea {
-  -webkit-appearance: none;
-  appearance: none;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   -webkit-border-radius: 1px;
@@ -427,8 +425,6 @@ textarea {
   display: none; }
 
 .custom-option {
-  -moz-appearance: none;
-  -webkit-appearance: none;
   border: 0;
   border-radius: 0px;
   padding: 15px; }
@@ -493,7 +489,7 @@ textarea {
     -moz-column-count: 2;
     column-count: 2; }
 
-  des-tree-col {
+  .des-tree-col {
     -webkit-column-count: 3;
     -moz-column-count: 3;
     column-count: 3; }

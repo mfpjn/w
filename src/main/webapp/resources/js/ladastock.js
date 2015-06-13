@@ -262,17 +262,7 @@ $(window).on('load resize', function(){
 		});
 });
 
-/* Outdated Browser */
 
-$(document).ready(function(){
-outdatedBrowser({
-	bgColor: '#f25648',
-	color: '#ffffff',
-	lowerThan: 'transform',
-	languagePath: 'js/outdatedbrowser/lang/de.html'
-})
-
-});
 
 /* E-Mail Form */
 
