@@ -13,12 +13,7 @@ public class FtpRouteBuilder extends RouteBuilder {
         // configure properties component for credentials.properties
        // PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class);
       //  pc.setLocation("classpath:credentials.properties");
-
-
-        ///workflow.6f.sk/web/
-        //workflow
-        //workflow
-        // &disconnect=true
+        
 
         from("file:reports/ftpSent")
                 .log("Uploading file ${file:name}")
@@ -26,11 +21,11 @@ public class FtpRouteBuilder extends RouteBuilder {
                 .log("Uploaded file ${file:name} to FTP server complete.");
 
 
-        // ftp://workflow@srv60.endora.cz:21/?password=workflow
+        // ftp://workflow@srv60.endora.cz:21/workflow?password=workflow
         /*
         * Download files from FTP server
         */
-        Thread.sleep(10000);
+        Thread.sleep(5000);
 
         from("ftp://workflow@srv60.endora.cz:21/workflow?password=workflow&binary=false")
                 .to("file:reports/ftpReceived")

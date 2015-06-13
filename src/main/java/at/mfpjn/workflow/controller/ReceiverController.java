@@ -1,17 +1,17 @@
 package at.mfpjn.workflow.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import at.mfpjn.workflow.model.FacebookModel;
 import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
+import at.mfpjn.workflow.routebuilder.FtpRouteBuilder;
+import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.facebook.FacebookComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.apache.camel.component.facebook.FacebookComponent;
 
-import at.mfpjn.workflow.model.FacebookModel;
-import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -46,16 +46,16 @@ public class ReceiverController {
         // stop the CamelContext
         context.stop();
 
-       /* context = new DefaultCamelContext();
+        context = new DefaultCamelContext();
 
         RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
         context.addRoutes(ftpRouteBuilder);
         context.start();
 
-        Thread.sleep(10000);
+        Thread.sleep(20000);
 
         context.stop();
-        */
+
 
     	
         return "home";
