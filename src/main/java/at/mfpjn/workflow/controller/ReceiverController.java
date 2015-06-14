@@ -10,6 +10,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestMethod;
 import twitter4j.TwitterException;
 import at.mfpjn.workflow.model.FacebookModel;
 import at.mfpjn.workflow.model.TwitterModel;
@@ -25,11 +26,101 @@ public class ReceiverController {
 	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
 	private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
 	private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
+
+    @RequestMapping(value = "/receiverForm")
+    public String home() throws Exception {
+        return "receiverForm";
+    }
 	
-    @RequestMapping(value = "/receiver")
+    @RequestMapping(value = "/receiver", method = RequestMethod.POST)
     public String receiver(HttpServletRequest request) throws Exception {
 
-    	// create CamelContext
+
+        //get from Facebook?
+        String facebookPost = (request.getParameter("getFacebook"));
+        boolean facebookBool;
+        if(facebookPost != null){
+            facebookBool = true;
+        }else{
+            facebookBool = false;
+        }
+
+        //get from Twitter?
+        String twitterPost = (request.getParameter("getTwitter"));
+        boolean twitterBool;
+        if(twitterPost != null){
+            twitterBool = true;
+        }else{
+            twitterBool = false;
+        }
+
+        //use Aggregator?
+        String aggregator = (request.getParameter("aggregator"));
+        boolean aggregatorBool;
+        if(aggregator != null){
+            aggregatorBool = true;
+        }else{
+            aggregatorBool = false;
+        }
+
+        //use Filter?
+        String filter = (request.getParameter("filter"));
+        boolean filterBool;
+        if(filter != null){
+            filterBool = true;
+        }else{
+            filterBool = false;
+        }
+
+        //filter sting
+        String filterString = (request.getParameter("filterString"));
+
+        //Save to Local
+        String saveLocal = (request.getParameter("saveLocal"));
+        boolean saveLocalBool;
+        if(saveLocal != null){
+            saveLocalBool = true;
+        }else{
+            saveLocalBool = false;
+        }
+
+        //Save to FTP
+        String saveFTP = (request.getParameter("saveFTP"));
+        boolean saveFTPBool;
+        if(saveFTP != null){
+            saveFTPBool = true;
+        }else{
+            saveFTPBool = false;
+        }
+
+        //Save to CSV
+        String saveCSV = (request.getParameter("saveCSV"));
+        boolean saveCSVBool;
+        if(saveCSV != null){
+            saveCSVBool = true;
+        }else{
+            saveCSVBool = false;
+        }
+
+        //Save to DB
+        String saveDB = (request.getParameter("saveDB"));
+        boolean saveDBBool;
+        if(saveDB != null){
+            saveDBBool = true;
+        }else{
+            saveDBBool = false;
+        }
+
+        //Save to Console
+        String saveConsole = (request.getParameter("saveConsole"));
+        boolean saveConsoleBool;
+        if(saveConsole != null){
+            saveConsoleBool = true;
+        }else{
+            saveConsoleBool = false;
+        }
+
+        // create CamelContext
         CamelContext context = new DefaultCamelContext();
 
         // add external components
@@ -53,10 +144,10 @@ public class ReceiverController {
         twitterReceiverRoute.setAccessTokenSecret(accessTokenSecret);
         twitterReceiverRoute.setUser(userName);
         //TODO set values from interface
-        twitterReceiverRoute.setFilter(true);
-        twitterReceiverRoute.setAggregate(true);
+        twitterReceiverRoute.setFilter(filterBool);
+        twitterReceiverRoute.setAggregate(aggregatorBool);
         
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, true, filterString);
         //context.addRoutes(facebookRoute);
         context.addRoutes(twitterReceiverRoute);
         context.addRoutes(receiverRoute);
