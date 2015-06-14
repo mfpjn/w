@@ -1,8 +1,8 @@
 package at.mfpjn.workflow.controller;
 
-import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
-import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
-import at.mfpjn.workflow.routebuilder.TwitterSenderRouteBuilder;
+import javax.jms.ConnectionFactory;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -11,27 +11,50 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.jms.ConnectionFactory;
-import javax.servlet.http.HttpServletRequest;
+import at.mfpjn.workflow.model.Customer;
+import at.mfpjn.workflow.model.UserMediaChannelsParameters;
+import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
+import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterSenderRouteBuilder;
+import at.mfpjn.workflow.service.CustomerService;
+import at.mfpjn.workflow.service.UserMediaChannelsParametersService;
 
 
 @Controller
 public class SenderController {
 
-    //TODO replace with DB call
     private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
     private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
-    private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
-    private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
+    private String accessToken;//private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
+    private String accessTokenSecret;//private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
     private CamelContext context;
+    
+	@Autowired
+	private CustomerService customerService;
+	
+	@Autowired
+	private UserMediaChannelsParametersService userMediaChannelsParametersService;
 
     @RequestMapping(value = "/sender", method = RequestMethod.POST)
     public String sender(HttpServletRequest request) throws Exception {
-
+    	Customer currentCustomer = loggedInCustomer();
+    	if(null == currentCustomer)
+    		return "login";
+    	
+    	UserMediaChannelsParameters userMediaChannelsParameter = userMediaChannelsParametersService.getTwitterParameter(currentCustomer.getId());
+    	
+    	if(userMediaChannelsParameter != null){
+    		accessToken = userMediaChannelsParameter.getAccessToken();
+    		accessTokenSecret = userMediaChannelsParameter.getAccessTokenSecret();
+    	}
+    	
         // create CamelContext
         context = new DefaultCamelContext();
 
@@ -41,7 +64,6 @@ public class SenderController {
 
         // get post input
         String post = (request.getParameter("postMessage"));
-        //System.out.print("Enter Post:");
 
         //post on Facebook?
         String facebookPost = (request.getParameter("postFacebook"));
@@ -70,13 +92,9 @@ public class SenderController {
         twitterRoute.setAccessTokenSecret(accessTokenSecret);
         twitterRoute.setConsumerKey(consumerKey);
         twitterRoute.setConsumerSecret(consumerSecret);
-        // route.setUser(user.getName());
-        // route.setUser("user");
-        //twitterRoute.setMessage(messageToPost);
 
         StringTemplateRouteBuilder stringTemplateRoute = new StringTemplateRouteBuilder();
-        //TODO set logged in user email address 
-        stringTemplateRoute.setRecipientEmail("lett.nicolas@gmail.com");
+        stringTemplateRoute.setRecipientEmail(currentCustomer.getEmail());
 
         // add routes
         context.addRoutes(senderRoute);
@@ -91,9 +109,8 @@ public class SenderController {
         context.start();
 
         template.sendBody("direct:start", post);
-        //TODO set first and last name of logged in user
         template.send("direct:emailConfirmation",
-                createConfirmationEmail("Nicolas", "Lett", post));
+                createConfirmationEmail(currentCustomer.getFirstName(), currentCustomer.getLastName(), post));
 
         String facebookRouteStatus1 = template.requestBody("controlbus:route?routeId=facebookRoute&action=status", null, String.class);
 
@@ -119,7 +136,26 @@ public class SenderController {
         return "home";
     }
 
-    private Exchange createConfirmationEmail(String firstName, String lastName,
+    private Customer loggedInCustomer() {
+    	String userName;
+    	
+    	try{
+    		userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+    	}
+    	catch(Exception e){
+    		return null;
+    	}
+    	
+    	
+		Customer currentCustomer = customerService.getUser(userName);
+        if (currentCustomer == null ) {
+        	return null;
+        }
+        
+        return currentCustomer;
+	}
+
+	private Exchange createConfirmationEmail(String firstName, String lastName,
                                              String postMessage) {
         Exchange exchange = context
                 .getEndpoint("direct:emailConfirmation").createExchange();
