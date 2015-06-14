@@ -136,15 +136,6 @@ public class ReceiverController {
             saveDBBool = false;
         }
 
-        // Save to Console
-        String saveConsole = (request.getParameter("saveConsole"));
-        boolean saveConsoleBool;
-        if (saveConsole != null) {
-            saveConsoleBool = true;
-        } else {
-            saveConsoleBool = false;
-        }
-
         // create CamelContext
         CamelContext context = new DefaultCamelContext();
 
@@ -176,12 +167,17 @@ public class ReceiverController {
             context.addRoutes(twitterReceiverRoute);
         }
 
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, fetchTwitterPosts, fetchFacebookPosts, saveFTPBool, filterString);
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, saveCSVBool, filterString);
         context.addRoutes(receiverRoute);
+
+        if (saveFTPBool) {
+            RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
+            context.addRoutes(ftpRouteBuilder);
+        }
 
         // start the route and let it do its work
         context.start();
-        Thread.sleep(10000);
+        Thread.sleep(15000);
 
         // stop the CamelContext
         context.stop();
@@ -218,7 +214,6 @@ public class ReceiverController {
         return tm.getTwitterUserName();
     }
 
-
     @RequestMapping(value = "/ftp")
     public String ftp(HttpServletRequest request) throws Exception {
         // create CamelContext
@@ -236,6 +231,4 @@ public class ReceiverController {
 
         return "home";
     }
-
-
 }

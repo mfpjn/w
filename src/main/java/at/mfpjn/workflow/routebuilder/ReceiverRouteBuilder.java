@@ -11,17 +11,13 @@ import java.util.Date;
 public class ReceiverRouteBuilder extends RouteBuilder {
 
     public boolean fileBool;
-    public boolean tw;
-    public boolean fb;
     public boolean csv;
     public String filterString;
     public String recipients = "";
 
-    public ReceiverRouteBuilder(boolean fileBool, boolean tw, boolean fb, boolean csv, String fs) {
+    public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs) {
         super();
         this.fileBool = fileBool;
-        this.tw = tw;
-        this.fb = fb;
         this.csv = csv;
         this.filterString = fs;
     }
