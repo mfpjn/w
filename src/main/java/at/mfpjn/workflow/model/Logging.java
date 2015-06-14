@@ -3,10 +3,13 @@ package at.mfpjn.workflow.model;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Created by Peter on 17-May-15.
  */
+
 @Entity
 @Table(name="logging")
 public class Logging {
@@ -23,7 +26,7 @@ public class Logging {
     private boolean picturePosted;
 
     @Column(name="PostedAt")
-    private DateTime postedAt;
+    private String postedAt;
 
     @Column(name="State")
     private String state;
@@ -31,14 +34,15 @@ public class Logging {
     @Column(name="MediaName")
     private String mediaName;
 
-    @ManyToOne
-    @JoinColumn(name="Customer_Id")
-    Customer customerId;
+    //@ManyToOne
+    //@JoinColumn(name="Customer_Id")
+    //Customer customerId;
+    int customerId;
 
     public Logging() {
     }
 
-    public Logging(String textPosted, boolean picturePosted, DateTime postedAt, String state, String mediaName, Customer customerId) {
+    public Logging(String textPosted, boolean picturePosted, String postedAt, String state, String mediaName, int customerId) {
         this.textPosted = textPosted;
         this.picturePosted = picturePosted;
         this.postedAt = postedAt;
@@ -47,6 +51,7 @@ public class Logging {
         this.customerId = customerId;
     }
 
+   
     public int getId() {
         return id;
     }
@@ -71,11 +76,11 @@ public class Logging {
         this.picturePosted = picturePosted;
     }
 
-    public DateTime getPostedAt() {
+    public String getPostedAt() {
         return postedAt;
     }
 
-    public void setPostedAt(DateTime postedAt) {
+    public void setPostedAt(String postedAt) {
         this.postedAt = postedAt;
     }
 
@@ -95,11 +100,11 @@ public class Logging {
         this.mediaName = mediaName;
     }
 
-    public Customer getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Customer customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
