@@ -54,8 +54,6 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                         }
                         exchange.getIn().setHeader("CamelFileName",
                                 constant(filename));
-                        System.out.println("UUUUUUUUUU: "
-                                + exchange.getIn().getBody());
                     }
                 }).to("direct:recipients").endChoice()
                 .when(header("Aggregate").isEqualTo(false))
@@ -70,18 +68,11 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                 if (csv == true) {
                     recipients += "direct:csv";
                 }
-                System.out.println("Recipients: " + recipients);
-
+                
                 exchange.getIn().setHeader("recipients", recipients);
             }
         })
                 .recipientList(header("recipients"));
-
-
-      /*  }).multicast()
-                .parallelProcessing()
-                .to(multicast);
-                */
 
         // test that our route is working
         from("direct:save2file").process(new Processor() {
@@ -94,14 +85,10 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
         from("direct:csv").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
-                System.out.println("Processing to csv: "
-                        + exchange.getIn().getBody());
-
                 Map<String, Object> body = new HashMap<String, Object>();
                 body.put("SocialNetwork", exchange.getIn().getHeader("SocialNetwork"));
                 body.put("Body", exchange.getIn().getBody(String.class));
                 body.put("Time", exchange.getIn().getHeader("Time"));
-
 
                 String filename = exchange.getIn().getHeader("SocialNetwork") + "-" + exchange.getIn().getMessageId() + ".csv";
                 filename = filename.replace("header{", "");

@@ -94,8 +94,6 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 
 	@Override
 	public void configure() throws Exception {
-		
-		
 		// poll twitter search for new tweets
 		from(
 				"twitter://timeline/user?type=polling&delay=99999&consumerKey="
@@ -117,14 +115,10 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 						exchange.getIn().setHeader("Filter", filter);
 						exchange.getIn().setHeader("Aggregate", aggregate);
 
-
                         // set filename
                         String filename = "TwitterPost-" + status.getId();
                         exchange.getIn().setHeader("CamelFileName", constant(filename));
-
-
 					}
 				}).to("direct:filter");
 	}
-
 }
