@@ -2,16 +2,14 @@ package at.mfpjn.workflow.routebuilder;
 
 
 
-import at.mfpjn.workflow.model.TwitterModel;
 import facebook4j.Post;
-import facebook4j.internal.org.json.JSONObject;
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import org.apache.camel.Processor;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
@@ -40,6 +38,8 @@ public class FacebookRouteBuilder extends RouteBuilder {
                         String message = post.getMessage();
                         exchange.getIn().setBody(message);
                         exchange.getIn().setHeader("SocialNetwork", header("fb"));
+                        exchange.getIn().setHeader("Number of shares", header(post.getSharesCount().toString()));
+                        exchange.getIn().setHeader("Time", header(post.getCreatedTime().toString()));
 
                         System.out.println("We just downloaded: " + message);
 

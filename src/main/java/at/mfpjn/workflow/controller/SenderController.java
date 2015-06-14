@@ -1,8 +1,8 @@
 package at.mfpjn.workflow.controller;
 
-import javax.jms.ConnectionFactory;
-import javax.servlet.http.HttpServletRequest;
-
+import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
+import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -15,10 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import at.mfpjn.workflow.model.TwitterModel;
-import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
-import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
-import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
+import javax.jms.ConnectionFactory;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller

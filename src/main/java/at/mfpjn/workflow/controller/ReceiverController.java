@@ -1,21 +1,19 @@
 package at.mfpjn.workflow.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import at.mfpjn.workflow.model.FacebookModel;
+import at.mfpjn.workflow.model.TwitterModel;
+import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
+import at.mfpjn.workflow.routebuilder.FtpRouteBuilder;
+import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.facebook.FacebookComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import twitter4j.TwitterException;
-import at.mfpjn.workflow.model.FacebookModel;
-import at.mfpjn.workflow.model.TwitterModel;
-import at.mfpjn.workflow.routebuilder.FacebookRouteBuilder;
-import at.mfpjn.workflow.routebuilder.FtpRouteBuilder;
-import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
-import at.mfpjn.workflow.routebuilder.TwitterReceiverRouteBuilder;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ReceiverController {
@@ -42,7 +40,7 @@ public class ReceiverController {
 
         // add routes
         RouteBuilder facebookRoute = new FacebookRouteBuilder();
-        
+      /*
         String userName = getTwitterUserName();
         
         TwitterReceiverRouteBuilder twitterReceiverRoute = new TwitterReceiverRouteBuilder();
@@ -52,32 +50,41 @@ public class ReceiverController {
         twitterReceiverRoute.setAccessToken(accessToken);
         twitterReceiverRoute.setAccessTokenSecret(accessTokenSecret);
         twitterReceiverRoute.setUser(userName);
-        
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
+*/
+        //TODO change back
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, false, true, true, "number");
         context.addRoutes(facebookRoute);
-        context.addRoutes(twitterReceiverRoute);
+  //      context.addRoutes(twitterReceiverRoute);
         context.addRoutes(receiverRoute);
 
 
         // start the route and let it do its work
         context.start();
-        Thread.sleep(10000);
+        Thread.sleep(15000);
 
         // stop the CamelContext
         context.stop();
 
+        return "home";
+    }
+
+    @RequestMapping(value = "/ftp")
+    public String ftp(HttpServletRequest request) throws Exception {
+
+        // create CamelContext
+        CamelContext context = new DefaultCamelContext();
         context = new DefaultCamelContext();
 
         RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
         context.addRoutes(ftpRouteBuilder);
+
         context.start();
 
-        Thread.sleep(20000);
+        Thread.sleep(10000);
 
         context.stop();
 
 
-    	
         return "home";
     }
 

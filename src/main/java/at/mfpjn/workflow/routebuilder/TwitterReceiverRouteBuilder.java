@@ -17,17 +17,10 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-
 import twitter4j.Status;
-import twitter4j.Twitter;
-import at.mfpjn.workflow.model.TwitterModel;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
@@ -100,8 +93,12 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 						String message = status.getText();
 						exchange.getIn().setBody(message);
 						exchange.getIn().setHeader("SocialNetwork", header("tw"));
+						exchange.getIn().setHeader("Number of shares", header(Integer.valueOf(status.getRetweetCount()).toString()));
+						exchange.getIn().setHeader("Time", header(status.getCreatedAt().toString()));
+
 
 						System.out.println("We just downloaded: " + message);
+
 
 					}
 				}).to("direct:filter");

@@ -1,35 +1,44 @@
 package at.mfpjn.workflow.routebuilder;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.properties.PropertiesComponent;
 
 /**
  * Created by Peter on 10-Jun-15.
+ * Contains following camel components:
+ * Properties / camel-core
+ * File / camel-core
+ * FTP / camel-ftp
  */
 public class FtpRouteBuilder extends RouteBuilder {
 
 
     public void configure() throws Exception {
 
-        // configure properties component for credentials.properties
-       // PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class);
-      //  pc.setLocation("classpath:credentials.properties");
-        
+        // configure properties component for FTP credentials
+        PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class);
+        pc.setLocation("classpath:credentialsFTP.properties");
 
-        from("file:reports/ftpSent")
+
+
+        /*
+        * Do a backup of posts to FTP server
+        */
+        from("file:{{directory.from}}")
                 .log("Uploading file ${file:name}")
-                .to("ftp://workflow@srv60.endora.cz:21/workflow?password=workflow&binary=false")
+                .to("{{server.address}}{{server.folder}}?password={{server.password}}&binary=false")
                 .log("Uploaded file ${file:name} to FTP server complete.");
 
+        Thread.sleep(5000);
 
-        // ftp://workflow@srv60.endora.cz:21/workflow?password=workflow
         /*
         * Download files from FTP server
         */
-        Thread.sleep(5000);
-
-        from("ftp://workflow@srv60.endora.cz:21/workflow?password=workflow&binary=false")
-                .to("file:reports/ftpReceived")
+    /*    from("{{server.address}}{{server.folder}}?password={{server.password}}&binary=false")
+                .log("Downloading file ${file:name}")
+                .to("file:{{directory.to}}")
                 .log("Downloaded file ${file:name} from FTP server complete.");
+    */
     }
 
 

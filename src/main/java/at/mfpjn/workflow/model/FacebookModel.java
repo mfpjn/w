@@ -1,11 +1,10 @@
 package at.mfpjn.workflow.model;
 
+import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.auth.AccessToken;
 import org.apache.camel.component.facebook.FacebookComponent;
 import org.apache.camel.component.facebook.config.FacebookConfiguration;
-
-import facebook4j.Facebook;
 
 /* * * * * * * * * * * * * * * * * *
  * Facebook test profile login:    *
@@ -25,7 +24,7 @@ public class FacebookModel {
 		this.appSecret = "31ec413453a18aa144db8bc4dc330ace";
 
 		/***** enter access token here: *****/
-		this.accessToken = "CAAKTZBxaIii0BAIrE7V4IaF5Fs39Hi2f4ZCOA8T28VCVIrI8CR4M2rA9vcNZBKGZBbgITH7jM4gnq3ozkamhuFW0mBNp5BxbUhsS5wlJyeVtVyFnuO1rfy5vPapVZCxqAHYxjcUkQ0aC22m2CCoNZAXMx4uF2k483QtdzXF570f2bLDZAM9MV84RhdZAX1TqZAhFwJSYRFnAt3qbG8r208NTgVZBzdfLy2a8wZD";
+		this.accessToken = "CAAKTZBxaIii0BAKGZBPWzkclHrS4pMwRwks9zWPuRQt3v6W4zpua5HuuCaMoPQmIjzizuR6754s6zbaw4i9QQZBGCNe0v7neBJzoChfIx47aN2HdreqM9YNXmIX8acIZBLiGMNHn5r3EYb9uu3pnBFo9JxEetHvuUoMopNSBIaYjErlMoHmRNAplrBqww1el8aci4Qu1WQU6PNYNSzN5HJ2yvAs0gq4ZCAAKTZBxaIii0BAKGZBPWzkclHrS4pMwRwks9zWPuRQt3v6W4zpua5HuuCaMoPQmIjzizuR6754s6zbaw4i9QQZBGCNe0v7neBJzoChfIx47aN2HdreqM9YNXmIX8acIZBLiGMNHn5r3EYb9uu3pnBFo9JxEetHvuUoMopNSBIaYjErlMoHmRNAplrBqww1el8aci4Qu1WQU6PNYNSzN5HJ2yvAs0gq4ZD";
 		/************************************/
 	}
 
