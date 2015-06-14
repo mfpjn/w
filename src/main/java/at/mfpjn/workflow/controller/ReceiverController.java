@@ -200,17 +200,8 @@ public class ReceiverController {
 
         if (shickItBool) {
 
-            context.start();
-            Thread.sleep(5000);
-
             String postString = receiverRoute.listofPosts();
             model.addAttribute("postString", postString);
-
-            // stop the CamelContext
-            context.stop();
-
-
-            System.out.println("List of Strings gets called");
 
             return "outputPosts";
         }
