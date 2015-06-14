@@ -47,7 +47,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                         String filename;
                         String header = exchange.getIn()
                                 .getHeader("SocialNetwork").toString();
-                        if (header.equals("fb")) {
+                        if (header.equals("Facebook")) {
                             filename = "FacebookAggregatedPosts-" + datetime;
                         } else {
                             filename = "TwitterAggregatedPosts-" + datetime;
