@@ -1,6 +1,7 @@
 package at.mfpjn.workflow.routebuilder;
 
 import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
+import at.mfpjn.workflow.aggregation.ReceiverJSPAggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -15,12 +16,15 @@ public class ReceiverRouteBuilder extends RouteBuilder {
     public boolean fileBool;
     public boolean csv;
     public String filterString;
+    public boolean schickIt;
+    public String postString;
 
-    public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs) {
+    public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs, boolean schickItBool) {
         super();
         this.fileBool = fileBool;
         this.csv = csv;
         this.filterString = fs;
+        this.schickIt = schickItBool;
     }
 
     public void configure() throws Exception {
@@ -68,7 +72,10 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                     recipients += "direct:save2file,";
                 }
                 if (csv == true) {
-                    recipients += "direct:csv";
+                    recipients += "direct:csv,";
+                }
+                if (schickIt == true) {
+                    recipients += "direct:schickIt,";
                 }
                 System.out.println("Recipients: " + recipients);
 
@@ -112,6 +119,21 @@ public class ReceiverRouteBuilder extends RouteBuilder {
         }).marshal().csv()
                 .to("file:reports/csv");
 
+        from("direct:schickIt").aggregate(header("SchickItAggregator"),
+                new ReceiverJSPAggregationStrategy())
+                .completionTimeout(1000)
+                .process(new Processor() {
+                    public void process(Exchange exchange) throws Exception {
+                        System.out.println("*******SCHICKIT*********" + exchange.getIn().getBody(String.class));
+                        postString = (exchange.getIn().getBody(String.class));
+                    }
+                }).end();
+
+    }
+
+    public String listofPosts() {
+        System.out.println("This is the Shit I want= " + postString);
+        return postString;
     }
 }
 

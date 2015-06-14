@@ -116,6 +116,7 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 						exchange.getIn().setHeader("Time", header(status.getCreatedAt().toString()));
 						exchange.getIn().setHeader("Filter", filter);
 						exchange.getIn().setHeader("Aggregate", aggregate);
+						exchange.getIn().setHeader("SchickItAggregator", header("SchickItAggregator"));
 
 
                         // set filename
