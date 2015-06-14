@@ -135,6 +135,14 @@ public class SenderController {
 
         return "home";
     }
+    
+	@RequestMapping(value = "/inputForm")
+	public String inputForm() {
+		if(null == loggedInCustomer())
+    		return "login";
+		
+		return "inputForm";
+	}
 
     private Customer loggedInCustomer() {
     	String userName;

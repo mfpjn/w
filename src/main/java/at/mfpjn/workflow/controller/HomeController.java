@@ -11,11 +11,6 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value = "/inputForm")
-	public String inputForm() {
-		return "inputForm";
-	}
-
 	@RequestMapping(value = "/receiverStart")
 	public String receiverStart() {
 		return "receiverStart";
