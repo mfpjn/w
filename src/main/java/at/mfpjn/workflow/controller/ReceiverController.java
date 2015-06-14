@@ -20,167 +20,168 @@ import at.mfpjn.workflow.routebuilder.TwitterReceiverRouteBuilder;
 
 @Controller
 public class ReceiverController {
-    
-	//TODO replace with DB call
+
+	// TODO replace with DB call
 	private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
 	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
 	private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
 	private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
 
-    @RequestMapping(value = "/receiverForm")
-    public String home() throws Exception {
-        return "receiverForm";
-    }
-	
-    @RequestMapping(value = "/receiver", method = RequestMethod.POST)
-    public String receiver(HttpServletRequest request) throws Exception {
-        //get from Facebook?
-        String facebookPost = (request.getParameter("getFacebook"));
-        boolean facebookBool;
-        if(facebookPost != null){
-            facebookBool = true;
-        }else{
-            facebookBool = false;
-        }
+	@RequestMapping(value = "/receiverForm")
+	public String home() throws Exception {
+		return "receiverForm";
+	}
 
-        //get from Twitter?
-        String twitterPost = (request.getParameter("getTwitter"));
-        boolean twitterBool;
-        if(twitterPost != null){
-            twitterBool = true;
-        }else{
-            twitterBool = false;
-        }
+	@RequestMapping(value = "/receiver", method = RequestMethod.POST)
+	public String receiver(HttpServletRequest request) throws Exception {
+		// get from Facebook?
+		String facebookPost = (request.getParameter("getFacebook"));
+		boolean fetchFacebookPosts;
+		if (facebookPost != null) {
+			fetchFacebookPosts = true;
+		} else {
+			fetchFacebookPosts = false;
+		}
 
-        //use Aggregator?
-        String aggregator = (request.getParameter("aggregator"));
-        boolean aggregatorBool;
-        if(aggregator != null){
-            aggregatorBool = true;
-        }else{
-            aggregatorBool = false;
-        }
+		// get from Twitter?
+		String twitterPost = (request.getParameter("getTwitter"));
+		boolean fetchTwitterPosts;
+		if (twitterPost != null) {
+			fetchTwitterPosts = true;
+		} else {
+			fetchTwitterPosts = false;
+		}
 
-        //use Filter?
-        String filter = (request.getParameter("filter"));
-        boolean filterBool;
-        if(filter != null){
-            filterBool = true;
-        }else{
-            filterBool = false;
-        }
+		// use Aggregator?
+		String aggregator = (request.getParameter("aggregator"));
+		boolean aggregatorBool;
+		if (aggregator != null) {
+			aggregatorBool = true;
+		} else {
+			aggregatorBool = false;
+		}
 
-        //filter sting
-        String filterString = (request.getParameter("filterString"));
+		// use Filter?
+		String filter = (request.getParameter("filter"));
+		boolean filterBool;
+		if (filter != null) {
+			filterBool = true;
+		} else {
+			filterBool = false;
+		}
 
-        //Save to Local
-        String saveLocal = (request.getParameter("saveLocal"));
-        boolean saveLocalBool;
-        if(saveLocal != null){
-            saveLocalBool = true;
-        }else{
-            saveLocalBool = false;
-        }
+		// filter sting
+		String filterString = (request.getParameter("filterString"));
 
-        //Save to FTP
-        String saveFTP = (request.getParameter("saveFTP"));
-        boolean saveFTPBool;
-        if(saveFTP != null){
-            saveFTPBool = true;
-        }else{
-            saveFTPBool = false;
-        }
+		// Save to Local
+		String saveLocal = (request.getParameter("saveLocal"));
+		boolean saveLocalBool;
+		if (saveLocal != null) {
+			saveLocalBool = true;
+		} else {
+			saveLocalBool = false;
+		}
 
-        //Save to CSV
-        String saveCSV = (request.getParameter("saveCSV"));
-        boolean saveCSVBool;
-        if(saveCSV != null){
-            saveCSVBool = true;
-        }else{
-            saveCSVBool = false;
-        }
+		// Save to FTP
+		String saveFTP = (request.getParameter("saveFTP"));
+		boolean saveFTPBool;
+		if (saveFTP != null) {
+			saveFTPBool = true;
+		} else {
+			saveFTPBool = false;
+		}
 
-        //Save to DB
-        String saveDB = (request.getParameter("saveDB"));
-        boolean saveDBBool;
-        if(saveDB != null){
-            saveDBBool = true;
-        }else{
-            saveDBBool = false;
-        }
+		// Save to CSV
+		String saveCSV = (request.getParameter("saveCSV"));
+		boolean saveCSVBool;
+		if (saveCSV != null) {
+			saveCSVBool = true;
+		} else {
+			saveCSVBool = false;
+		}
 
-        //Save to Console
-        String saveConsole = (request.getParameter("saveConsole"));
-        boolean saveConsoleBool;
-        if(saveConsole != null){
-            saveConsoleBool = true;
-        }else{
-            saveConsoleBool = false;
-        }
+		// Save to DB
+		String saveDB = (request.getParameter("saveDB"));
+		boolean saveDBBool;
+		if (saveDB != null) {
+			saveDBBool = true;
+		} else {
+			saveDBBool = false;
+		}
 
-        // create CamelContext
-        CamelContext context = new DefaultCamelContext();
+		// Save to Console
+		String saveConsole = (request.getParameter("saveConsole"));
+		boolean saveConsoleBool;
+		if (saveConsole != null) {
+			saveConsoleBool = true;
+		} else {
+			saveConsoleBool = false;
+		}
 
-        // add external components
-        FacebookComponent fc = new FacebookComponent();
-        context.addComponent("facebook", fc);
+		// create CamelContext
+		CamelContext context = new DefaultCamelContext();
 
-        // set Facebook component configuration
-        FacebookModel fm = new FacebookModel();
-        fm.setFbCamelConfiguration(fc);
+		if (fetchFacebookPosts) {
+			// add external components
+			FacebookComponent fc = new FacebookComponent();
+			context.addComponent("facebook", fc);
+			
+			// set Facebook component configuration
+			FacebookModel fm = new FacebookModel();
+			fm.setFbCamelConfiguration(fc);
 
-        // add routes
-        FacebookReceiverRouteBuilder facebookRoute = new FacebookReceiverRouteBuilder();
-        //TODO set values from interface
-        facebookRoute.setFilter(true);
-        facebookRoute.setAggregate(true);
-        
-        String userName = getTwitterUserName();
-        
-        TwitterReceiverRouteBuilder twitterReceiverRoute = new TwitterReceiverRouteBuilder();
-        //TODO replace with db call
-        twitterReceiverRoute.setConsumerKey(consumerKey);
-        twitterReceiverRoute.setConsumerSecret(consumerSecret);
-        twitterReceiverRoute.setAccessToken(accessToken);
-        twitterReceiverRoute.setAccessTokenSecret(accessTokenSecret);
-        twitterReceiverRoute.setUser(userName);
-        //TODO set values from interface
-        twitterReceiverRoute.setFilter(filterBool);
-        twitterReceiverRoute.setAggregate(aggregatorBool);
-        
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, true, filterString);
-        context.addRoutes(facebookRoute);
-        context.addRoutes(twitterReceiverRoute);
-        context.addRoutes(receiverRoute);
+			FacebookReceiverRouteBuilder facebookRoute = new FacebookReceiverRouteBuilder();
+			facebookRoute.setFilter(filterBool);
+			facebookRoute.setAggregate(aggregatorBool);
+			context.addRoutes(facebookRoute);
+		}
 
+		if (fetchTwitterPosts) {
+			TwitterReceiverRouteBuilder twitterReceiverRoute = new TwitterReceiverRouteBuilder();
+			// TODO replace with db call
+			twitterReceiverRoute.setConsumerKey(consumerKey);
+			twitterReceiverRoute.setConsumerSecret(consumerSecret);
+			twitterReceiverRoute.setAccessToken(accessToken);
+			twitterReceiverRoute.setAccessTokenSecret(accessTokenSecret);
+			String userName = getTwitterUserName();
+			twitterReceiverRoute.setUser(userName);
+			twitterReceiverRoute.setFilter(filterBool);
+			twitterReceiverRoute.setAggregate(aggregatorBool);
+			context.addRoutes(twitterReceiverRoute);
+		}
 
-        // start the route and let it do its work
-        context.start();
-        Thread.sleep(10000);
+		RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool,
+				true, filterString);
+		context.addRoutes(receiverRoute);
 
-        // stop the CamelContext
-        context.stop();
+		// start the route and let it do its work
+		context.start();
+		Thread.sleep(10000);
 
-        context = new DefaultCamelContext();
+		// stop the CamelContext
+		context.stop();
 
-        RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
-        context.addRoutes(ftpRouteBuilder);
-        context.start();
+		context = new DefaultCamelContext();
 
-        Thread.sleep(20000);
+		RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
+		context.addRoutes(ftpRouteBuilder);
+		context.start();
 
-        context.stop();
-        
-        return "home";
-    }
+		Thread.sleep(20000);
 
-	private String getTwitterUserName() throws IllegalStateException, TwitterException {
-        TwitterModel tm = new TwitterModel();
-        //TODO replace with db call
-        tm.setAccessToken(accessToken);
-        tm.setAccessTokenSecret(accessTokenSecret);
-        tm.setConsumerKey(consumerKey);
-        tm.setConsumerSecret(consumerSecret);
-        return tm.getTwitterUserName();
+		context.stop();
+
+		return "home";
+	}
+
+	private String getTwitterUserName() throws IllegalStateException,
+			TwitterException {
+		TwitterModel tm = new TwitterModel();
+		// TODO replace with db call
+		tm.setAccessToken(accessToken);
+		tm.setAccessTokenSecret(accessTokenSecret);
+		tm.setConsumerKey(consumerKey);
+		tm.setConsumerSecret(consumerSecret);
+		return tm.getTwitterUserName();
 	}
 }
