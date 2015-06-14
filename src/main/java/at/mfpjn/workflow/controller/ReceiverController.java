@@ -28,7 +28,7 @@ public class ReceiverController {
 	
     @RequestMapping(value = "/receiver")
     public String receiver(HttpServletRequest request) throws Exception {
-
+    	
     	// create CamelContext
         CamelContext context = new DefaultCamelContext();
 
@@ -71,9 +71,9 @@ public class ReceiverController {
 
         context = new DefaultCamelContext();
 
-//        RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
-//        context.addRoutes(ftpRouteBuilder);
-//        context.start();
+        RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
+        context.addRoutes(ftpRouteBuilder);
+        context.start();
 
         Thread.sleep(20000);
 
