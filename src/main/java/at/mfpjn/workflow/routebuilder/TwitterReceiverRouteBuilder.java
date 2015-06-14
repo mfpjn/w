@@ -33,7 +33,25 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
+	private Boolean filter;
+	private Boolean aggregate;
 	
+	public Boolean getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
+	
+	public Boolean getAggregate() {
+		return aggregate;
+	}
+
+	public void setAggregate(Boolean aggregate) {
+		this.aggregate = aggregate;
+	}
+
 	public String getConsumerKey() {
 		return consumerKey;
 	}
@@ -90,14 +108,19 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 
 						Status status = exchange.getIn().getBody(Status.class);
 
+                        // get message
 						String message = status.getText();
 						exchange.getIn().setBody(message);
 						exchange.getIn().setHeader("SocialNetwork", header("tw"));
 						exchange.getIn().setHeader("Number of shares", header(Integer.valueOf(status.getRetweetCount()).toString()));
 						exchange.getIn().setHeader("Time", header(status.getCreatedAt().toString()));
+						exchange.getIn().setHeader("Filter", filter);
+						exchange.getIn().setHeader("Aggregate", aggregate);
 
 
-						System.out.println("We just downloaded: " + message);
+                        // set filename
+                        String filename = "TwitterPost-" + status.getId();
+                        exchange.getIn().setHeader("CamelFileName", constant(filename));
 
 
 					}

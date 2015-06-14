@@ -6,7 +6,7 @@
 <div class="container padding-header">
     <div class="row">
         <div class="grid-50"><a href="${pageContext.request.contextPath}/inputForm"><button class="button-green">Post to Platform</button> </a> </div>
-        <div class="grid-50"><a href="#"><button class="button-green">Get from Platform</button> </a> </div>
+        <div class="grid-50"><a href="${pageContext.request.contextPath}/receiverForm"><button class="button-green">Get from Platform</button> </a> </div>
     </div>
 </div>
 <jsp:include page="comp/footer.jsp" />

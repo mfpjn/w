@@ -5,6 +5,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ReceiverRouteBuilder extends RouteBuilder {
 
     public boolean fileBool;
@@ -12,7 +15,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
     public boolean fb;
     public boolean csv;
     public String filterString;
-    public String multicast = "";
+    public String recipients = "";
 
     public ReceiverRouteBuilder(boolean fileBool, boolean tw, boolean fb, boolean csv, String fs) {
         super();
@@ -25,30 +28,62 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
     public void configure() throws Exception {
 
-        from("direct:filter").
-                // filter(body().contains(filterString)).
-                        to("direct:agg");
-
+        from("direct:filter").choice().when(header("Filter").isEqualTo(true))
+                .filter(body().contains("Posting")).to("direct:agg")
+                .endChoice().when(header("Filter").isEqualTo(false))
+                .to("direct:agg").end();
 
         from("direct:agg")
+                .choice()
+                .when(header("Aggregate").isEqualTo(true))
                 .aggregate(header("SocialNetwork"),
                         new ReceiverAggregationStrategy())
-                .completionTimeout(10000).to("direct:multicast");
+                .completionTimeout(1000)
+                .process(new Processor() {
+                    public void process(Exchange exchange) throws Exception {
 
-        from("direct:multicast").process(new Processor() {
+                        Date date = new Date();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                                "YYYY-MM-dd_hh-mm-ss");
+                        String datetime = dateFormat.format(date);
+
+                        String filename;
+                        String header = exchange.getIn()
+                                .getHeader("SocialNetwork").toString();
+                        if (header.equals("fb")) {
+                            filename = "FacebookAggregatedPosts-" + datetime;
+                        } else {
+                            filename = "TwitterAggregatedPosts-" + datetime;
+                        }
+                        exchange.getIn().setHeader("CamelFileName",
+                                constant(filename));
+                        System.out.println("UUUUUUUUUU: "
+                                + exchange.getIn().getBody());
+                    }
+                }).to("direct:recipient").endChoice()
+                .when(header("Aggregate").isEqualTo(false))
+                .to("direct:recipients").end();
+
+        from("direct:recipients").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 if (fileBool == true) {
-                    multicast += "direct:save2file,";
+                    recipients += "direct:save2file,";
                 }
                 if (csv == true) {
-                    multicast += "direct:csv";
+                    recipients += "direct:csv,";
                 }
-                System.out.println("Multicast: " + multicast);
+                System.out.println("Recipients: " + recipients);
 
+                exchange.getIn().setHeader("recipients", recipients);
             }
-        }).multicast()
+        })
+                .recipientList(header("recipients"));
+
+
+      /*  }).multicast()
                 .parallelProcessing()
                 .to(multicast);
+                */
 
         // test that our route is working
         from("direct:save2file").process(new Processor() {
@@ -67,19 +102,19 @@ public class ReceiverRouteBuilder extends RouteBuilder {
             }
         }).choice()
                 .when(header("tw"))
-                .to("jms:twItems")
+                .to("direct:twItems")
                 .when(header("fb"))
-                .to("jms:fbItems")
+                .to("direct:fbItems")
                 .otherwise()
-                .to("jms:badFiles").
-                end();
+                .to("direct:badFiles")
+                .end();
 
 
-        from("jms:twItems")
+        from("direct:twItems")
                 .marshal().csv()
                 .to("file:reports/twitterCSV");
 
-        from("jms:fbItems")
+        from("direct:fbItems")
                 .marshal().csv()
                 .to("file:reports/facebookCSV");
 
