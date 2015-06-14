@@ -30,7 +30,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
         from("direct:filter").choice().when(header("Filter").isEqualTo(true))
-                .filter(body().contains("Posting")).to("direct:agg")
+                .filter(body().contains(filterString)).to("direct:agg")
                 .endChoice().when(header("Filter").isEqualTo(false))
                 .to("direct:agg").end();
 
@@ -51,15 +51,13 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                         String filename;
                         String header = exchange.getIn()
                                 .getHeader("SocialNetwork").toString();
-                        if (header.equals("Facebook")) {
+                        if (header.equals("header{Facebook}")) {
                             filename = "FacebookAggregatedPosts-" + datetime;
                         } else {
                             filename = "TwitterAggregatedPosts-" + datetime;
                         }
                         exchange.getIn().setHeader("CamelFileName",
                                 constant(filename));
-                        System.out.println("UUUUUUUUUU: "
-                                + exchange.getIn().getBody());
                     }
                 }).to("direct:recipients").endChoice()
                 .when(header("Aggregate").isEqualTo(false))
