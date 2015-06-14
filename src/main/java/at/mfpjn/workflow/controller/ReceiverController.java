@@ -145,17 +145,23 @@ public class ReceiverController {
         RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, saveCSVBool, filterString);
         context.addRoutes(receiverRoute);
 
-        if (saveFTPBool) {
-            RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
-            context.addRoutes(ftpRouteBuilder);
-        }
-
         // start the route and let it do its work
         context.start();
-        Thread.sleep(15000);
+        Thread.sleep(25000);
 
         // stop the CamelContext
         context.stop();
+
+        if (saveFTPBool) {
+            context = new DefaultCamelContext();
+            RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
+            context.addRoutes(ftpRouteBuilder);
+            context.start();
+            Thread.sleep(180000);
+
+            // stop the CamelContext
+            context.stop();
+        }
 
         return "home";
     }
@@ -170,5 +176,5 @@ public class ReceiverController {
         tm.setConsumerSecret(consumerSecret);
         return tm.getTwitterUserName();
     }
-    
+
 }

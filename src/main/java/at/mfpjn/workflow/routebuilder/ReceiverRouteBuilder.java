@@ -7,13 +7,14 @@ import org.apache.camel.builder.RouteBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReceiverRouteBuilder extends RouteBuilder {
 
     public boolean fileBool;
     public boolean csv;
     public String filterString;
-    public String recipients = "";
 
     public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs) {
         super();
@@ -62,11 +63,12 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
         from("direct:recipients").process(new Processor() {
             public void process(Exchange exchange) throws Exception {
+                String recipients = "";
                 if (fileBool == true) {
                     recipients += "direct:save2file,";
                 }
                 if (csv == true) {
-                    recipients += "direct:csv,";
+                    recipients += "direct:csv";
                 }
                 System.out.println("Recipients: " + recipients);
 
@@ -95,24 +97,20 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                 System.out.println("Processing to csv: "
                         + exchange.getIn().getBody());
 
+                Map<String, Object> body = new HashMap<String, Object>();
+                body.put("SocialNetwork", exchange.getIn().getHeader("SocialNetwork"));
+                body.put("Body", exchange.getIn().getBody(String.class));
+                body.put("Time", exchange.getIn().getHeader("Time"));
+
+
+                String filename = exchange.getIn().getHeader("SocialNetwork") + "-" + exchange.getIn().getMessageId() + ".csv";
+                filename = filename.replace("header{", "");
+                filename = filename.replace("}", "");
+                exchange.getIn().setBody(body);
+                exchange.getIn().setHeader("CamelFileName", constant(filename));
             }
-        }).choice()
-                .when(header("tw"))
-                .to("direct:twItems")
-                .when(header("fb"))
-                .to("direct:fbItems")
-                .otherwise()
-                .to("direct:badFiles")
-                .end();
-
-
-        from("direct:twItems")
-                .marshal().csv()
-                .to("file:reports/twitterCSV");
-
-        from("direct:fbItems")
-                .marshal().csv()
-                .to("file:reports/facebookCSV");
+        }).marshal().csv()
+                .to("file:reports/csv");
 
     }
 }

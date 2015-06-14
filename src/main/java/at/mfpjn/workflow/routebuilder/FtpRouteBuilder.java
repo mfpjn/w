@@ -24,12 +24,12 @@ public class FtpRouteBuilder extends RouteBuilder {
         /*
         * Do a backup of posts to FTP server
         */
-        from("file:{{directory.from}}")
+        from("file:{{directory.from}}?noop=true") // to just copy it
                 .log("Uploading file ${file:name}")
                 .to("{{server.address}}{{server.folder}}?password={{server.password}}&binary=false")
                 .log("Uploaded file ${file:name} to FTP server complete.");
 
-        Thread.sleep(5000);
+      //  Thread.sleep(5000);
 
         /*
         * Download files from FTP server

@@ -111,8 +111,8 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
                         // get message
 						String message = status.getText();
 						exchange.getIn().setBody(message);
-						exchange.getIn().setHeader("SocialNetwork", header("tw"));
-						exchange.getIn().setHeader("Number of shares", header(Integer.valueOf(status.getRetweetCount()).toString()));
+						exchange.getIn().setHeader("SocialNetwork", header("Twitter"));
+						exchange.getIn().setHeader("Number of shares", header("test"));
 						exchange.getIn().setHeader("Time", header(status.getCreatedAt().toString()));
 						exchange.getIn().setHeader("Filter", filter);
 						exchange.getIn().setHeader("Aggregate", aggregate);

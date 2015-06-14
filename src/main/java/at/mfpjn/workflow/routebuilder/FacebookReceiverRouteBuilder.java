@@ -56,8 +56,8 @@ public class FacebookReceiverRouteBuilder extends RouteBuilder {
                         // get message
                         String message = post.getMessage();
                         exchange.getIn().setBody(message);
-                        exchange.getIn().setHeader("SocialNetwork", header("fb"));
-                        exchange.getIn().setHeader("Number of shares", header(post.getSharesCount().toString()));
+                        exchange.getIn().setHeader("SocialNetwork", header("Facebook"));
+                        exchange.getIn().setHeader("Number of shares", header("test"));
                         exchange.getIn().setHeader("Time", header(post.getCreatedTime().toString()));
                         exchange.getIn().setHeader("Filter", filter);
                         exchange.getIn().setHeader("Aggregate", aggregate);
