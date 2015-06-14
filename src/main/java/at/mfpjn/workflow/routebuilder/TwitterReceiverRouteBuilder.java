@@ -119,8 +119,8 @@ public class TwitterReceiverRouteBuilder extends RouteBuilder {
 						String message = status.getText();
 						exchange.getIn().setBody(message);
 						exchange.getIn().setHeader("SocialNetwork", header("tw"));
-						exchange.getIn().setHeader("Filter", false);
-						exchange.getIn().setHeader("Aggregate", true);
+						exchange.getIn().setHeader("Filter", filter);
+						exchange.getIn().setHeader("Aggregate", aggregate);
 
                         // set filename
                         String filename = "TwitterPost-" + status.getId();

@@ -2,16 +2,15 @@ package at.mfpjn.workflow.routebuilder;
 
 
 
-import at.mfpjn.workflow.model.TwitterModel;
-import facebook4j.Post;
-import facebook4j.internal.org.json.JSONObject;
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.RouteBuilder;
+
+import facebook4j.Post;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
@@ -20,6 +19,24 @@ import org.apache.camel.Processor;
 public class FacebookReceiverRouteBuilder extends RouteBuilder {
 
     String FACEBOOK_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	private Boolean filter;
+	private Boolean aggregate;
+
+	public Boolean getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
+
+	public Boolean getAggregate() {
+		return aggregate;
+	}
+
+	public void setAggregate(Boolean aggregate) {
+		this.aggregate = aggregate;
+	}
 
 	@Override
 	public void configure() throws Exception {
@@ -41,6 +58,8 @@ public class FacebookReceiverRouteBuilder extends RouteBuilder {
                         String message = post.getMessage();
                         exchange.getIn().setBody(message);
                         exchange.getIn().setHeader("SocialNetwork", header("fb"));
+                        exchange.getIn().setHeader("Filter", filter);
+						exchange.getIn().setHeader("Aggregate", aggregate);
 
                         // set filename
                         String filename = "FacebookPost-" + post.getId();

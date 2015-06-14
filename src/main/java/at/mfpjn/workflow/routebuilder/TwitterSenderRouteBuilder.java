@@ -21,7 +21,7 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.twitter.TwitterComponent;
 
-public class TwitterRouteBuilder extends RouteBuilder {
+public class TwitterSenderRouteBuilder extends RouteBuilder {
 
 	private int port;
 	private String consumerKey;

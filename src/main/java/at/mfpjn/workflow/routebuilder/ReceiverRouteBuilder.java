@@ -25,8 +25,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 
 	public void configure() throws Exception {
 
-		from("direct:filter").choice()
-				.when(header("Filter").isEqualTo(true))
+		from("direct:filter").choice().when(header("Filter").isEqualTo(true))
 				.filter(body().contains("Posting")).to("direct:agg")
 				.endChoice().when(header("Filter").isEqualTo(false))
 				.to("direct:agg").end();
@@ -36,7 +35,8 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 				.when(header("Aggregate").isEqualTo(true))
 				.aggregate(header("SocialNetwork"),
 						new ReceiverAggregationStrategy())
-				.completionTimeout(1000).process(new Processor() {
+				.completionTimeout(1000)
+				.process(new Processor() {
 					public void process(Exchange exchange) throws Exception {
 
 						Date date = new Date();
@@ -57,7 +57,8 @@ public class ReceiverRouteBuilder extends RouteBuilder {
 						System.out.println("UUUUUUUUUU: "
 								+ exchange.getIn().getBody());
 					}
-				}).to("direct:recipient").endChoice().when(header("Aggregate").isEqualTo(false))
+				}).to("direct:recipient").endChoice()
+				.when(header("Aggregate").isEqualTo(false))
 				.to("direct:recipient").end();
 
 		from("direct:recipient").process(new Processor() {

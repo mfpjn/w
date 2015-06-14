@@ -41,7 +41,10 @@ public class ReceiverController {
         fm.setFbCamelConfiguration(fc);
 
         // add routes
-        RouteBuilder facebookRoute = new FacebookReceiverRouteBuilder();
+        FacebookReceiverRouteBuilder facebookRoute = new FacebookReceiverRouteBuilder();
+        //TODO set values from interface
+        facebookRoute.setFilter(true);
+        facebookRoute.setAggregate(true);
         
         String userName = getTwitterUserName();
         
@@ -57,7 +60,7 @@ public class ReceiverController {
         twitterReceiverRoute.setAggregate(true);
         
         RouteBuilder receiverRoute = new ReceiverRouteBuilder(true, true, "number");
-        //context.addRoutes(facebookRoute);
+        context.addRoutes(facebookRoute);
         context.addRoutes(twitterReceiverRoute);
         context.addRoutes(receiverRoute);
 
@@ -78,9 +81,7 @@ public class ReceiverController {
         Thread.sleep(20000);
 
         context.stop();
-
-
-    	
+        
         return "home";
     }
 

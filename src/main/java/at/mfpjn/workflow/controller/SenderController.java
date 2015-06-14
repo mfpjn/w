@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
 import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
-import at.mfpjn.workflow.routebuilder.TwitterRouteBuilder;
+import at.mfpjn.workflow.routebuilder.TwitterSenderRouteBuilder;
 
 
 @Controller
@@ -67,7 +67,7 @@ public class SenderController {
         
 		// Define routes
         RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
-        TwitterRouteBuilder twitterRoute = new TwitterRouteBuilder();
+        TwitterSenderRouteBuilder twitterRoute = new TwitterSenderRouteBuilder();
         twitterRoute.setAccessToken(accessToken);
         twitterRoute.setAccessTokenSecret(accessTokenSecret);
         twitterRoute.setConsumerKey(consumerKey);
