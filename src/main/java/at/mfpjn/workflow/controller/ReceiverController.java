@@ -151,7 +151,7 @@ public class ReceiverController {
             context.addRoutes(twitterReceiverRoute);
         }
 
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, fetchTwitterPosts, fetchFacebookPosts, saveFTPBool, filterString);
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, saveFTPBool, saveCSVBool, filterString);
         context.addRoutes(receiverRoute);
 
         // start the route and let it do its work
