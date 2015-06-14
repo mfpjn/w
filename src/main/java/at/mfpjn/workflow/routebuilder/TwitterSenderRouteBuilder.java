@@ -21,13 +21,7 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.twitter.TwitterComponent;
 
-import at.mfpjn.workflow.model.TwitterModel;
-
-/**
- * A Camel route that updates from twitter all tweets using having the search
- * term. And post the changes to web-socket, that can be viewed from a web page
- */
-public class TwitterRouteBuilder extends RouteBuilder {
+public class TwitterSenderRouteBuilder extends RouteBuilder {
 
 	private int port;
 	private String consumerKey;
@@ -137,7 +131,9 @@ public class TwitterRouteBuilder extends RouteBuilder {
 		// Message endpoint, message router, message translator, log, delay, multicast
 		// String endpoint = "twitter://timeline/user?" + getUriTokens();
 
-		String endpoint = "twitter://timeline/user?" + TwitterModel.getUriTokens();
+		String endpoint = "twitter://timeline/user?" + "consumerKey=" + consumerKey + "&consumerSecret="
+				+ consumerSecret + "&accessToken=" + accessToken
+				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
 
 		from("direct:twitterq")
 		  .setHeader("CamelTwitterKeywords", header("bar")).choice()
@@ -145,7 +141,7 @@ public class TwitterRouteBuilder extends RouteBuilder {
 			.transform(body().append(" sent via Schick-It!"))
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
 			.endChoice()
-			.otherwise().transform(body()).delay(1000)
+			.otherwise().transform(body())
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
 		
 		 // setup Twitter component

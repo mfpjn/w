@@ -17,15 +17,10 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-
-import at.mfpjn.workflow.model.TwitterModel;
+import twitter4j.Status;
 
 /**
  * A Camel route that updates from twitter all tweets using having the search
@@ -33,12 +28,103 @@ import at.mfpjn.workflow.model.TwitterModel;
  */
 public class TwitterReceiverRouteBuilder extends RouteBuilder {
 
-	@Override
-	public void configure() throws Exception {
-		 // poll twitter search for new tweets
-//		from("twitter://timeline/home?type=polling&delay=5&consumerKey=" + TwitterModel.consumerKey + "&consumerSecret=" + TwitterModel.consumerSecret + "&accessToken=" + TwitterModel.accessToken + "&accessTokenSecret=" + TwitterModel.accessTokenSecret)
-//		  .to("direct:receiver");
+	private String user;
+	private String consumerKey;
+	private String consumerSecret;
+	private String accessToken;
+	private String accessTokenSecret;
+	private Boolean filter;
+	private Boolean aggregate;
+	
+	public Boolean getFilter() {
+		return filter;
 	}
 
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
+	
+	public Boolean getAggregate() {
+		return aggregate;
+	}
+
+	public void setAggregate(Boolean aggregate) {
+		this.aggregate = aggregate;
+	}
+
+	public String getConsumerKey() {
+		return consumerKey;
+	}
+
+	public void setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
+	}
+
+	public String getConsumerSecret() {
+		return consumerSecret;
+	}
+
+	public void setConsumerSecret(String consumerSecret) {
+		this.consumerSecret = consumerSecret;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getAccessTokenSecret() {
+		return accessTokenSecret;
+	}
+
+	public void setAccessTokenSecret(String accessTokenSecret) {
+		this.accessTokenSecret = accessTokenSecret;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	@Override
+	public void configure() throws Exception {
+		
+		
+		// poll twitter search for new tweets
+		from(
+				"twitter://timeline/user?type=polling&delay=99999&consumerKey="
+						+ consumerKey + "&consumerSecret="
+						+ consumerSecret + "&accessToken="
+						+ accessToken + "&accessTokenSecret="
+						+ accessTokenSecret + "&user=" + user).process(
+				new Processor() {
+					public void process(Exchange exchange) throws Exception {
+
+						Status status = exchange.getIn().getBody(Status.class);
+
+                        // get message
+						String message = status.getText();
+						exchange.getIn().setBody(message);
+						exchange.getIn().setHeader("SocialNetwork", header("tw"));
+						exchange.getIn().setHeader("Number of shares", header(Integer.valueOf(status.getRetweetCount()).toString()));
+						exchange.getIn().setHeader("Time", header(status.getCreatedAt().toString()));
+						exchange.getIn().setHeader("Filter", filter);
+						exchange.getIn().setHeader("Aggregate", aggregate);
+
+
+                        // set filename
+                        String filename = "TwitterPost-" + status.getId();
+                        exchange.getIn().setHeader("CamelFileName", constant(filename));
+
+
+					}
+				}).to("direct:filter");
+	}
 
 }

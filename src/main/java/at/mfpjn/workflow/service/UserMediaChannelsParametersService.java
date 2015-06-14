@@ -26,4 +26,12 @@ public class UserMediaChannelsParametersService {
     public UserMediaChannelsParameters getParameter(int id) {
         return userMediaChannelsParametersDao.getParameter(id);
     }
+    
+    public UserMediaChannelsParameters getTwitterParameter(int id) {
+        return userMediaChannelsParametersDao.getTwitterParameter(id);
+    }
+    
+    public UserMediaChannelsParameters getFacebookParameter(int id) {
+        return userMediaChannelsParametersDao.getFacebookParameter(id);
+    }
 }
