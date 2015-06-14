@@ -1,11 +1,10 @@
 package at.mfpjn.test;
 
-import org.apache.camel.Exchange;
+import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
-import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
 
 /**
  * Created by george on 2015-06-14.
