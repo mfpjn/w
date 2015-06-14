@@ -48,4 +48,8 @@ public class UserMediaChannelsParametersDaoImpl implements UserMediaChannelsPara
     public UserMediaChannelsParameters getFacebookParameter(int id){
         return (UserMediaChannelsParameters)session().createQuery("from UserMediaChannelsParameters where Customer_Id = :id and media = 'Facebook'").setParameter("id", id).uniqueResult();
     }
+    
+    public void deleteTwitterParameters(int id){
+        session().createQuery("delete UserMediaChannelsParameters where Customer_Id = :id and media = 'Twitter'").setParameter("id", id).executeUpdate();
+    }
 }

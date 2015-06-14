@@ -16,4 +16,6 @@ public interface UserMediaChannelsParametersDao {
     UserMediaChannelsParameters getTwitterParameter(int id);
     
     UserMediaChannelsParameters getFacebookParameter(int id);
+    
+    void deleteTwitterParameters(int id);
 }

@@ -34,4 +34,8 @@ public class UserMediaChannelsParametersService {
     public UserMediaChannelsParameters getFacebookParameter(int id) {
         return userMediaChannelsParametersDao.getFacebookParameter(id);
     }
+
+	public void deleteTwitterParameters(int id) {
+		userMediaChannelsParametersDao.deleteTwitterParameters(id);
+	}
 }
