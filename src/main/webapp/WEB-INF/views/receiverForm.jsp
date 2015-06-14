@@ -45,9 +45,9 @@
         </div>
         <div class="row">
             <div class="grid-20 tece">
-                <input name="saveLocal" type="checkbox" value="y"/> Save to Local File
+                <input id="saveLocal" name="saveLocal" type="checkbox" value="y"/> Save to Local File
             </div>
-            <div class="grid-20 tece">
+            <div id="pushFTP" class="grid-20 tece" style="visibility: hidden;">
                 <input name="saveFTP" type="checkbox" value="y"/> Save to FTP
             </div>
             <div class="grid-20 tece">
@@ -74,6 +74,16 @@
             alert("Please check at least one social media to pull from");
             return false;
         }
+    });
+
+    $(document).ready(function() {
+        $("#saveLocal").change(function(){
+            if($(this).is(":checked")){
+                $('#pushFTP').css('visibility', 'visible');
+            }else{
+                $('#pushFTP').css('visibility', 'hidden');
+            }
+        });
     });
 </script>
 <jsp:include page="comp/footer.jsp" />
