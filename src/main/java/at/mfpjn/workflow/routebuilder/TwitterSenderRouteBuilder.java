@@ -141,7 +141,7 @@ public class TwitterSenderRouteBuilder extends RouteBuilder {
 			.transform(body().append(" sent via Schick-It!"))
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
 			.endChoice()
-			.otherwise().transform(body()).delay(1000)
+			.otherwise().transform(body())
 			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
 		
 		 // setup Twitter component
