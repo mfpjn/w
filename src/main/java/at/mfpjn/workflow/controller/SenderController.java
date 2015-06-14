@@ -19,158 +19,187 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import at.mfpjn.workflow.model.Customer;
-import at.mfpjn.workflow.model.UserMediaChannelsParameters;
 import at.mfpjn.workflow.routebuilder.SenderRouteBuilder;
 import at.mfpjn.workflow.routebuilder.StringTemplateRouteBuilder;
 import at.mfpjn.workflow.routebuilder.TwitterSenderRouteBuilder;
 import at.mfpjn.workflow.service.CustomerService;
 import at.mfpjn.workflow.service.UserMediaChannelsParametersService;
 
-
 @Controller
 public class SenderController {
 
-    private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
-    private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
-    private String accessToken;//private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
-    private String accessTokenSecret;//private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
-    private CamelContext context;
-    
+	private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
+	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
+	//TODO uncomment for login/registration
+	private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";// private
+																							// String
+																							// accessToken;
+	private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";// private
+																								// String
+																								// accessTokenSecret;
+	private CamelContext context;
+
 	@Autowired
 	private CustomerService customerService;
-	
+
 	@Autowired
 	private UserMediaChannelsParametersService userMediaChannelsParametersService;
 
-    @RequestMapping(value = "/sender", method = RequestMethod.POST)
-    public String sender(HttpServletRequest request) throws Exception {
-    	Customer currentCustomer = loggedInCustomer();
-    	if(null == currentCustomer)
-    		return "login";
-    	
-    	UserMediaChannelsParameters userMediaChannelsParameter = userMediaChannelsParametersService.getTwitterParameter(currentCustomer.getId());
-    	
-    	if(userMediaChannelsParameter != null){
-    		accessToken = userMediaChannelsParameter.getAccessToken();
-    		accessTokenSecret = userMediaChannelsParameter.getAccessTokenSecret();
-    	}
-    	
-        // create CamelContext
-        context = new DefaultCamelContext();
+	@RequestMapping(value = "/sender", method = RequestMethod.POST)
+	public String sender(HttpServletRequest request) throws Exception {
+		// TODO uncomment for login/registration
+		// Customer currentCustomer = loggedInCustomer();
+		// if(null == currentCustomer)
+		// return "login";
+		//
+		// UserMediaChannelsParameters userMediaChannelsParameter =
+		// userMediaChannelsParametersService.getTwitterParameter(currentCustomer.getId());
+		//
+		// if(userMediaChannelsParameter != null){
+		// accessToken = userMediaChannelsParameter.getAccessToken();
+		// accessTokenSecret =
+		// userMediaChannelsParameter.getAccessTokenSecret();
+		// }
 
-        // connect to embedded ActiveMQ JMS broker
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
-        context.addComponent("jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+		// create CamelContext
+		context = new DefaultCamelContext();
 
-        // get post input
-        String post = (request.getParameter("postMessage"));
+		// connect to embedded ActiveMQ JMS broker
+		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
+				"vm://localhost?broker.persistent=false");
+		context.addComponent("jms",
+				JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
 
-        //post on Facebook?
-        String facebookPost = (request.getParameter("postFacebook"));
+		// get post input
+		String post = (request.getParameter("postMessage"));
 
-        boolean facebookBool;
-        if (facebookPost != null) {
-            facebookBool = true;
-        } else {
-            facebookBool = false;
-        }
+		// post on Facebook?
+		String facebookPost = (request.getParameter("postFacebook"));
 
-        //post on Twitter?
-        String twitterPost = (request.getParameter("postTwitter"));
+		boolean facebookBool;
+		if (facebookPost != null) {
+			facebookBool = true;
+		} else {
+			facebookBool = false;
+		}
 
-        boolean twitterBool;
-        if (twitterPost != null) {
-            twitterBool = true;
-        } else {
-            twitterBool = false;
-        }
+		// post on Twitter?
+		String twitterPost = (request.getParameter("postTwitter"));
 
-        // Define routes
-        RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool, twitterBool);
-        TwitterSenderRouteBuilder twitterRoute = new TwitterSenderRouteBuilder();
-        twitterRoute.setAccessToken(accessToken);
-        twitterRoute.setAccessTokenSecret(accessTokenSecret);
-        twitterRoute.setConsumerKey(consumerKey);
-        twitterRoute.setConsumerSecret(consumerSecret);
+		boolean twitterBool;
+		if (twitterPost != null) {
+			twitterBool = true;
+		} else {
+			twitterBool = false;
+		}
 
-        StringTemplateRouteBuilder stringTemplateRoute = new StringTemplateRouteBuilder();
-        stringTemplateRoute.setRecipientEmail(currentCustomer.getEmail());
+		// Define routes
+		RouteBuilder senderRoute = new SenderRouteBuilder(facebookBool,
+				twitterBool);
+		TwitterSenderRouteBuilder twitterRoute = new TwitterSenderRouteBuilder();
+		twitterRoute.setAccessToken(accessToken);
+		twitterRoute.setAccessTokenSecret(accessTokenSecret);
+		twitterRoute.setConsumerKey(consumerKey);
+		twitterRoute.setConsumerSecret(consumerSecret);
 
-        // add routes
-        context.addRoutes(senderRoute);
-        context.addRoutes(twitterRoute);
-        context.addRoutes(stringTemplateRoute);
+		StringTemplateRouteBuilder stringTemplateRoute = new StringTemplateRouteBuilder();
+		// TODO uncomment for login/registration
+		// stringTemplateRoute.setRecipientEmail(currentCustomer.getEmail());
+		stringTemplateRoute.setRecipientEmail("test@gmail.com");
 
-        context.start();
+		// add routes
+		context.addRoutes(senderRoute);
+		context.addRoutes(twitterRoute);
+		context.addRoutes(stringTemplateRoute);
 
-        ProducerTemplate template = context.createProducerTemplate();
+		context.start();
 
-        // start the route and let it do its work
-        context.start();
+		ProducerTemplate template = context.createProducerTemplate();
 
-        template.sendBody("direct:start", post);
-        template.send("direct:emailConfirmation",
-                createConfirmationEmail(currentCustomer.getFirstName(), currentCustomer.getLastName(), post));
+		// start the route and let it do its work
+		context.start();
 
-        String facebookRouteStatus1 = template.requestBody("controlbus:route?routeId=facebookRoute&action=status", null, String.class);
+		template.sendBody("direct:start", post);
 
-        System.out.println("*** Facebook Route Status (exp. Started): " + facebookRouteStatus1);
+		// TODO uncomment for login/registration
+		template.send("direct:emailConfirmation",
+				createConfirmationEmail("firstname", "lastname", post));
+		// template.send(
+		// "direct:emailConfirmation",
+		// createConfirmationEmail(currentCustomer.getFirstName(),
+		// currentCustomer.getLastName(), post));
 
-        String twitterRouteStatus1 = template.requestBody("controlbus:route?routeId=twitterRoute&action=status", null, String.class);
+		String facebookRouteStatus1 = template.requestBody(
+				"controlbus:route?routeId=facebookRoute&action=status", null,
+				String.class);
 
-        System.out.println("*** Twitter Route Status (exp. Started): " + twitterRouteStatus1);
+		System.out.println("*** Facebook Route Status (exp. Started): "
+				+ facebookRouteStatus1);
 
-        Thread.sleep(10000);
+		String twitterRouteStatus1 = template.requestBody(
+				"controlbus:route?routeId=twitterRoute&action=status", null,
+				String.class);
 
-        // stop the CamelContext
-        context.stop();
+		System.out.println("*** Twitter Route Status (exp. Started): "
+				+ twitterRouteStatus1);
 
-        String facebookRouteStatus2 = template.requestBody("controlbus:route?routeId=facebookRoute&action=status", null, String.class);
+		Thread.sleep(10000);
 
-        System.out.println("*** Facebook Route Status (exp. Stopped): " + facebookRouteStatus2);
+		// stop the CamelContext
+		context.stop();
 
-        String twitterRouteStatus2 = template.requestBody("controlbus:route?routeId=twitterRoute&action=status", null, String.class);
+		String facebookRouteStatus2 = template.requestBody(
+				"controlbus:route?routeId=facebookRoute&action=status", null,
+				String.class);
 
-        System.out.println("*** Twitter Route Status (exp. Stopped): " + twitterRouteStatus2);
+		System.out.println("*** Facebook Route Status (exp. Stopped): "
+				+ facebookRouteStatus2);
 
-        return "home";
-    }
-    
+		String twitterRouteStatus2 = template.requestBody(
+				"controlbus:route?routeId=twitterRoute&action=status", null,
+				String.class);
+
+		System.out.println("*** Twitter Route Status (exp. Stopped): "
+				+ twitterRouteStatus2);
+
+		return "home";
+	}
+
 	@RequestMapping(value = "/inputForm")
 	public String inputForm() {
-		if(null == loggedInCustomer())
-    		return "login";
-		
+		// TODO uncomment for login/registration
+		// if (null == loggedInCustomer())
+		// return "login";
+
 		return "inputForm";
 	}
 
-    private Customer loggedInCustomer() {
-    	String userName;
-    	
-    	try{
-    		userName = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-    	}
-    	catch(Exception e){
-    		return null;
-    	}
-    	
-    	
+	private Customer loggedInCustomer() {
+		String userName;
+
+		try {
+			userName = ((User) SecurityContextHolder.getContext()
+					.getAuthentication().getPrincipal()).getUsername();
+		} catch (Exception e) {
+			return null;
+		}
+
 		Customer currentCustomer = customerService.getUser(userName);
-        if (currentCustomer == null ) {
-        	return null;
-        }
-        
-        return currentCustomer;
+		if (currentCustomer == null) {
+			return null;
+		}
+
+		return currentCustomer;
 	}
 
 	private Exchange createConfirmationEmail(String firstName, String lastName,
-                                             String postMessage) {
-        Exchange exchange = context
-                .getEndpoint("direct:emailConfirmation").createExchange();
-        Message msg = exchange.getIn();
-        msg.setHeader("firstName", firstName);
-        msg.setHeader("lastName", lastName);
-        msg.setBody(postMessage);
-        return exchange;
-    }
+			String postMessage) {
+		Exchange exchange = context.getEndpoint("direct:emailConfirmation")
+				.createExchange();
+		Message msg = exchange.getIn();
+		msg.setHeader("firstName", firstName);
+		msg.setHeader("lastName", lastName);
+		msg.setBody(postMessage);
+		return exchange;
+	}
 }
