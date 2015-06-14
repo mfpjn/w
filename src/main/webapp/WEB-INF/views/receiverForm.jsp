@@ -57,7 +57,7 @@
                 <input name="saveDB" type="checkbox" value="y"/> Save to Database
             </div>
             <div class="grid-20 tece">
-                <input name="saveConsole" type="checkbox" value="y"/> Print in Console
+                <input name="saveSchickit" type="checkbox" value="y"/> Show on SchickIT
             </div>
         </div>
         <div class="row">

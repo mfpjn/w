@@ -14,6 +14,7 @@ import org.apache.camel.component.facebook.FacebookComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import twitter4j.TwitterException;
@@ -33,6 +34,8 @@ public class ReceiverController {
     // String
     // accessTokenSecret;
 
+    public ReceiverRouteBuilder receiverRoute;
+
     @Autowired
     private CustomerService customerService;
 
@@ -49,7 +52,7 @@ public class ReceiverController {
     }
 
     @RequestMapping(value = "/receiver", method = RequestMethod.POST)
-    public String receiver(HttpServletRequest request) throws Exception {
+    public String receiver(HttpServletRequest request, Model model) throws Exception {
 
         // TODO uncomment for login/registration
         // Customer currentCustomer = loggedInCustomer();
@@ -131,13 +134,13 @@ public class ReceiverController {
             saveCSVBool = false;
         }
 
-        // Save to DB
-        String saveDB = (request.getParameter("saveDB"));
-        boolean saveDBBool;
-        if (saveDB != null) {
-            saveDBBool = true;
+        // Save ShickIT
+        String saveSchickit = (request.getParameter("saveSchickit"));
+        boolean shickItBool;
+        if (saveSchickit != null) {
+            shickItBool = true;
         } else {
-            saveDBBool = false;
+            shickItBool = false;
         }
 
         // create CamelContext
@@ -171,8 +174,8 @@ public class ReceiverController {
             context.addRoutes(twitterReceiverRoute);
         }
 
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool,
-                saveCSVBool, filterString);
+        receiverRoute = new ReceiverRouteBuilder(saveLocalBool,
+                saveCSVBool, filterString, shickItBool);
         context.addRoutes(receiverRoute);
 
         context.start();
@@ -191,6 +194,25 @@ public class ReceiverController {
 
             // stop the CamelContext
             context.stop();
+        }
+
+        // start the route and let it do its work
+
+        if (shickItBool) {
+
+            context.start();
+            Thread.sleep(5000);
+
+            String postString = receiverRoute.listofPosts();
+            model.addAttribute("postString", postString);
+
+            // stop the CamelContext
+            context.stop();
+
+
+            System.out.println("List of Strings gets called");
+
+            return "outputPosts";
         }
 
         return "home";

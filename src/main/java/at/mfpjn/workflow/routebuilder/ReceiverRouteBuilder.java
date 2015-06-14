@@ -1,6 +1,7 @@
 package at.mfpjn.workflow.routebuilder;
 
 import at.mfpjn.workflow.aggregation.ReceiverAggregationStrategy;
+import at.mfpjn.workflow.aggregation.ReceiverJSPAggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -15,18 +16,21 @@ public class ReceiverRouteBuilder extends RouteBuilder {
     public boolean fileBool;
     public boolean csv;
     public String filterString;
+    public boolean schickIt;
+    public String postString;
 
-    public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs) {
+    public ReceiverRouteBuilder(boolean fileBool, boolean csv, String fs, boolean schickItBool) {
         super();
         this.fileBool = fileBool;
         this.csv = csv;
         this.filterString = fs;
+        this.schickIt = schickItBool;
     }
 
     public void configure() throws Exception {
 
         from("direct:filter").choice().when(header("Filter").isEqualTo(true))
-                .filter(body().contains("Posting")).to("direct:agg")
+                .filter(body().contains(filterString)).to("direct:agg")
                 .endChoice().when(header("Filter").isEqualTo(false))
                 .to("direct:agg").end();
 
@@ -47,7 +51,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                         String filename;
                         String header = exchange.getIn()
                                 .getHeader("SocialNetwork").toString();
-                        if (header.equals("Facebook")) {
+                        if (header.equals("header{Facebook}")) {
                             filename = "FacebookAggregatedPosts-" + datetime;
                         } else {
                             filename = "TwitterAggregatedPosts-" + datetime;
@@ -66,7 +70,10 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                     recipients += "direct:save2file,";
                 }
                 if (csv == true) {
-                    recipients += "direct:csv";
+                    recipients += "direct:csv,";
+                }
+                if (schickIt == true) {
+                    recipients += "direct:schickIt,";
                 }
                 
                 exchange.getIn().setHeader("recipients", recipients);
@@ -99,6 +106,21 @@ public class ReceiverRouteBuilder extends RouteBuilder {
         }).marshal().csv()
                 .to("file:reports/csv");
 
+        from("direct:schickIt").aggregate(header("SchickItAggregator"),
+                new ReceiverJSPAggregationStrategy())
+                .completionTimeout(1000)
+                .process(new Processor() {
+                    public void process(Exchange exchange) throws Exception {
+                        System.out.println("*******SCHICKIT*********" + exchange.getIn().getBody(String.class));
+                        postString = (exchange.getIn().getBody(String.class));
+                    }
+                }).end();
+
+    }
+
+    public String listofPosts() {
+        System.out.println("This is the Shit I want= " + postString);
+        return postString;
     }
 }
 
