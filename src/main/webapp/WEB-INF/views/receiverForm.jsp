@@ -44,17 +44,20 @@
             </div>
         </div>
         <div class="row">
-            <div class="grid-25 tece">
+            <div class="grid-20 tece">
                 <input name="saveLocal" type="checkbox" value="y"/> Save to Local File
             </div>
-            <div class="grid-25 tece">
+            <div class="grid-20 tece">
                 <input name="saveFTP" type="checkbox" value="y"/> Save to FTP
             </div>
-            <div class="grid-25 tece">
+            <div class="grid-20 tece">
                 <input name="saveCSV" type="checkbox" value="y"/> Save to CSV
             </div>
-            <div class="grid-25 tece">
+            <div class="grid-20 tece">
                 <input name="saveDB" type="checkbox" value="y"/> Save to Database
+            </div>
+            <div class="grid-20 tece">
+                <input name="saveConsole" type="checkbox" value="y"/> Print in Console
             </div>
         </div>
         <div class="row">

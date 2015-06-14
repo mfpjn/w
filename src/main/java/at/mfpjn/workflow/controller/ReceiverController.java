@@ -109,6 +109,15 @@ public class ReceiverController {
 			saveDBBool = false;
 		}
 
+		// Save to Console
+		String saveConsole = (request.getParameter("saveConsole"));
+		boolean saveConsoleBool;
+		if (saveConsole != null) {
+			saveConsoleBool = true;
+		} else {
+			saveConsoleBool = false;
+		}
+
 		// create CamelContext
 		CamelContext context = new DefaultCamelContext();
 
