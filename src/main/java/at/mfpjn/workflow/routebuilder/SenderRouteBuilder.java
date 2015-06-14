@@ -18,18 +18,29 @@ package at.mfpjn.workflow.routebuilder;
  * limitations under the License.
  */
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import at.mfpjn.workflow.model.Customer;
 import at.mfpjn.workflow.model.FacebookModel;
+import at.mfpjn.workflow.model.Logging;
+import at.mfpjn.workflow.service.CustomerService;
 
 public class SenderRouteBuilder extends RouteBuilder {
 
 	public boolean fb;
 	public boolean tw;
 	
-	
+	@Autowired
+	CustomerService customerService;
 	
 	public SenderRouteBuilder(boolean fb, boolean tw) {
 		super();
@@ -45,7 +56,7 @@ public class SenderRouteBuilder extends RouteBuilder {
 
         //from("direct:start").to("direct:messages");
 
-		from("direct:start").
+		from("direct:start").wireTap("direct:persistance").
 		process(new Processor() {
 			public void process(Exchange exchange) throws Exception {
 				System.out.println("Message in RecipList: " + exchange.getIn().getBody());
@@ -72,5 +83,41 @@ public class SenderRouteBuilder extends RouteBuilder {
                 fc.sendPost(post);
             }
         });	
+        
+        from("direct:persistance").process(new Processor() {
+            public void process(Exchange exchange) throws Exception {
+                System.out.println("Persistance queue!!!!!!!!!!!: " 
+                        + exchange.getIn().getBody());
+                
+                               
+        		int userId = Integer.parseInt(exchange.getIn().getHeader("myId").toString());
+        		                             
+                Logging logging = new Logging();
+                if (fb == true && tw == true) {
+                	logging.setMediaName("Facebook, Twitter");
+				}else {
+					if(fb == true){
+						logging.setMediaName("Facebook");
+					}
+					if(tw == true){
+						logging.setMediaName("Twitter");
+					}
+				}
+                
+                logging.setCustomerId(userId);     
+                Date dt = new Date();
+                SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTime = sdf.format(dt);
+                logging.setPicturePosted(false);
+                logging.setPostedAt(currentTime);
+                logging.setTextPosted(exchange.getIn().getBody().toString());
+                exchange.getIn().setBody("INSERT INTO logging (TextPosted,PostedAt,MediaName,Customer_Id) "
+	           			+ "VALUES('" + logging.getTextPosted().toString() + "','"
+	           					+ logging.getPostedAt() +"','"
+	           					+ logging.getMediaName() +"','"
+	           					+ logging.getCustomerId() +"');");
+                
+            }
+        }).to("jdbc:workflowDB"); 
 	}
 }

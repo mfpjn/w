@@ -1,114 +1,148 @@
 package at.mfpjn.workflow.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.facebook.FacebookComponent;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import twitter4j.TwitterException;
+import at.mfpjn.workflow.model.Customer;
 import at.mfpjn.workflow.model.FacebookModel;
 import at.mfpjn.workflow.model.TwitterModel;
 import at.mfpjn.workflow.routebuilder.FacebookReceiverRouteBuilder;
 import at.mfpjn.workflow.routebuilder.FtpRouteBuilder;
 import at.mfpjn.workflow.routebuilder.ReceiverRouteBuilder;
 import at.mfpjn.workflow.routebuilder.TwitterReceiverRouteBuilder;
-import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.facebook.FacebookComponent;
-import org.apache.camel.impl.DefaultCamelContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import twitter4j.TwitterException;
-
-import javax.servlet.http.HttpServletRequest;
-
+import at.mfpjn.workflow.service.CustomerService;
+import at.mfpjn.workflow.service.UserMediaChannelsParametersService;
 
 @Controller
 public class ReceiverController {
 
-    // TODO replace with DB call
-    private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
-    private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
-    private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l";
-    private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx";
+	private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
+	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
+	//TODO uncomment for login/registration
+	private final String accessToken = "3214140528-UfqhFlBsTwElZe1ItXNfJD7FdxBhRyPsmM8qs6l"; // private
+																								// String
+																								// accessToken;
+	private final String accessTokenSecret = "U8QAwFW1muOTOQSAt3spO8alUJagslSwUTcdgIp1CCCxx"; // private
+																								// String
+																								// accessTokenSecret;
 
+	@Autowired
+	private CustomerService customerService;
 
-    @RequestMapping(value = "/receiverForm")
-    public String home() throws Exception {
-        return "receiverForm";
-    }
+	@Autowired
+	private UserMediaChannelsParametersService userMediaChannelsParametersService;
 
-    @RequestMapping(value = "/receiver", method = RequestMethod.POST)
-    public String receiver(HttpServletRequest request) throws Exception {
-        // get from Facebook?
-        String facebookPost = (request.getParameter("getFacebook"));
-        boolean fetchFacebookPosts;
-        if (facebookPost != null) {
-            fetchFacebookPosts = true;
-        } else {
-            fetchFacebookPosts = false;
-        }
+	@RequestMapping(value = "/receiverForm")
+	public String home() throws Exception {
+		// TODO uncomment for login/registration
+		// if (null == loggedInCustomer())
+		// return "login";
 
-        // get from Twitter?
-        String twitterPost = (request.getParameter("getTwitter"));
-        boolean fetchTwitterPosts;
-        if (twitterPost != null) {
-            fetchTwitterPosts = true;
-        } else {
-            fetchTwitterPosts = false;
-        }
+		return "receiverForm";
+	}
 
-        // use Aggregator?
-        String aggregator = (request.getParameter("aggregator"));
-        boolean aggregatorBool;
-        if (aggregator != null) {
-            aggregatorBool = true;
-        } else {
-            aggregatorBool = false;
-        }
+	@RequestMapping(value = "/receiver", method = RequestMethod.POST)
+	public String receiver(HttpServletRequest request) throws Exception {
 
-        // use Filter?
-        String filter = (request.getParameter("filter"));
-        boolean filterBool;
-        if (filter != null) {
-            filterBool = true;
-        } else {
-            filterBool = false;
-        }
+		// TODO uncomment for login/registration
+		// Customer currentCustomer = loggedInCustomer();
+		// if(null == currentCustomer)
+		// return "login";
+		//
+		// UserMediaChannelsParameters userMediaChannelsParameter =
+		// userMediaChannelsParametersService.getTwitterParameter(currentCustomer.getId());
+		//
+		// if(userMediaChannelsParameter != null){
+		// accessToken = userMediaChannelsParameter.getAccessToken();
+		// accessTokenSecret =
+		// userMediaChannelsParameter.getAccessTokenSecret();
+		// }
 
-        // filter sting
-        String filterString = (request.getParameter("filterString"));
+		// get from Facebook?
+		String facebookPost = (request.getParameter("getFacebook"));
+		boolean fetchFacebookPosts;
+		if (facebookPost != null) {
+			fetchFacebookPosts = true;
+		} else {
+			fetchFacebookPosts = false;
+		}
 
-        // Save to Local
-        String saveLocal = (request.getParameter("saveLocal"));
-        boolean saveLocalBool;
-        if (saveLocal != null) {
-            saveLocalBool = true;
-        } else {
-            saveLocalBool = false;
-        }
+		// get from Twitter?
+		String twitterPost = (request.getParameter("getTwitter"));
+		boolean fetchTwitterPosts;
+		if (twitterPost != null) {
+			fetchTwitterPosts = true;
+		} else {
+			fetchTwitterPosts = false;
+		}
 
-        // Save to FTP
-        String saveFTP = (request.getParameter("saveFTP"));
-        boolean saveFTPBool;
-        if (saveFTP != null) {
-            saveFTPBool = true;
-        } else {
-            saveFTPBool = false;
-        }
+		// use Aggregator?
+		String aggregator = (request.getParameter("aggregator"));
+		boolean aggregatorBool;
+		if (aggregator != null) {
+			aggregatorBool = true;
+		} else {
+			aggregatorBool = false;
+		}
 
-        // Save to CSV
-        String saveCSV = (request.getParameter("saveCSV"));
-        boolean saveCSVBool;
-        if (saveCSV != null) {
-            saveCSVBool = true;
-        } else {
-            saveCSVBool = false;
-        }
+		// use Filter?
+		String filter = (request.getParameter("filter"));
+		boolean filterBool;
+		if (filter != null) {
+			filterBool = true;
+		} else {
+			filterBool = false;
+		}
 
-        // Save to DB
-        String saveDB = (request.getParameter("saveDB"));
-        boolean saveDBBool;
-        if (saveDB != null) {
-            saveDBBool = true;
-        } else {
-            saveDBBool = false;
-        }
+		// filter sting
+		String filterString = (request.getParameter("filterString"));
+
+		// Save to Local
+		String saveLocal = (request.getParameter("saveLocal"));
+		boolean saveLocalBool;
+		if (saveLocal != null) {
+			saveLocalBool = true;
+		} else {
+			saveLocalBool = false;
+		}
+
+		// Save to FTP
+		String saveFTP = (request.getParameter("saveFTP"));
+		boolean saveFTPBool;
+		if (saveFTP != null) {
+			saveFTPBool = true;
+		} else {
+			saveFTPBool = false;
+		}
+
+		// Save to CSV
+		String saveCSV = (request.getParameter("saveCSV"));
+		boolean saveCSVBool;
+		if (saveCSV != null) {
+			saveCSVBool = true;
+		} else {
+			saveCSVBool = false;
+		}
+
+		// Save to DB
+		String saveDB = (request.getParameter("saveDB"));
+		boolean saveDBBool;
+		if (saveDB != null) {
+			saveDBBool = true;
+		} else {
+			saveDBBool = false;
+		}
 
         // create CamelContext
         CamelContext context = new DefaultCamelContext();
@@ -130,7 +164,6 @@ public class ReceiverController {
 
         if (fetchTwitterPosts) {
             TwitterReceiverRouteBuilder twitterReceiverRoute = new TwitterReceiverRouteBuilder();
-            // TODO replace with db call
             twitterReceiverRoute.setConsumerKey(consumerKey);
             twitterReceiverRoute.setConsumerSecret(consumerSecret);
             twitterReceiverRoute.setAccessToken(accessToken);
@@ -141,17 +174,12 @@ public class ReceiverController {
             twitterReceiverRoute.setAggregate(aggregatorBool);
             context.addRoutes(twitterReceiverRoute);
         }
-
-        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool, saveCSVBool, filterString);
+        
+        RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool,
+                saveCSVBool, filterString);
         context.addRoutes(receiverRoute);
 
-        // start the route and let it do its work
-        context.start();
-        Thread.sleep(25000);
-
-        // stop the CamelContext
-        context.stop();
-
+       
         if (saveFTPBool) {
             context = new DefaultCamelContext();
             RouteBuilder ftpRouteBuilder = new FtpRouteBuilder();
@@ -165,6 +193,9 @@ public class ReceiverController {
 
         return "home";
     }
+		RouteBuilder receiverRoute = new ReceiverRouteBuilder(saveLocalBool,
+				saveCSVBool, filterString);
+		context.addRoutes(receiverRoute);
 
     private String getTwitterUserName() throws IllegalStateException,
             TwitterException {
@@ -176,5 +207,5 @@ public class ReceiverController {
         tm.setConsumerSecret(consumerSecret);
         return tm.getTwitterUserName();
     }
-
+    
 }

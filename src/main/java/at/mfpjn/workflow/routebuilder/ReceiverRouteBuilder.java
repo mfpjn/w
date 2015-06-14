@@ -57,7 +57,7 @@ public class ReceiverRouteBuilder extends RouteBuilder {
                         System.out.println("UUUUUUUUUU: "
                                 + exchange.getIn().getBody());
                     }
-                }).to("direct:recipient").endChoice()
+                }).to("direct:recipients").endChoice()
                 .when(header("Aggregate").isEqualTo(false))
                 .to("direct:recipients").end();
 

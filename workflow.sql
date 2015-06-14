@@ -61,20 +61,16 @@ DROP TABLE IF EXISTS `workflow`.`logging` ;
 
 CREATE TABLE IF NOT EXISTS `workflow`.`logging` (
   `Id` INT(11) NOT NULL AUTO_INCREMENT,
-  `TextPosted` VARCHAR(500) NULL DEFAULT NULL,
+  `TextPosted` VARCHAR(500) NOT NULL,
   `PicturePosted` TINYINT(1) NULL DEFAULT NULL,
   `PostedAt` DATETIME NOT NULL,
-  `State` ENUM('Pending','Sucessful','Unsucessful') NOT NULL,
-  `MediaName` ENUM('Facebook','Twitter','Instagram','Google') NOT NULL,
+  `State` ENUM('Pending','Sucessful','Unsucessful') NULL DEFAULT NULL,
+  `MediaName` VARCHAR(500) NOT NULL,
   `Customer_Id` INT(11) NOT NULL,
   PRIMARY KEY (`Id`),
-  INDEX `fk_logging_customer1_idx` (`Customer_Id` ASC),
-  CONSTRAINT `fk_logging_customer1`
-    FOREIGN KEY (`Customer_Id`)
-    REFERENCES `workflow`.`customer` (`Id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  INDEX `fk_logging_customer1_idx` (`Customer_Id` ASC))
 ENGINE = InnoDB
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = latin1;
 
 
