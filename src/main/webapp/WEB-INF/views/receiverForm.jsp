@@ -18,10 +18,10 @@
         </div>
         <div class="row">
             <div class="grid-50 tece">
-                <input name="getTwitter" type="checkbox" value="y"/> Get from Twitter
+                <input class="selectSocialMedia" name="getTwitter" type="checkbox" value="y"/> Get from Twitter
             </div>
             <div class="grid-50 tece">
-                <input name="getFacebook" type="checkbox" value="y"/> Get from Facebook
+                <input class="selectSocialMedia" name="getFacebook" type="checkbox" value="y"/> Get from Facebook
             </div>
         </div>
         <div class="row">
@@ -67,4 +67,13 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $("form").submit(function(){
+        var checked = $(".selectSocialMedia:checked").length > 0;
+        if (!checked){
+            alert("Please check at least one social media to pull from");
+            return false;
+        }
+    });
+</script>
 <jsp:include page="comp/footer.jsp" />
