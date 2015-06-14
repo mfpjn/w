@@ -175,6 +175,12 @@ public class ReceiverController {
                 saveCSVBool, filterString);
         context.addRoutes(receiverRoute);
 
+        context.start();
+        Thread.sleep(25000);
+
+        // stop the CamelContext
+        context.stop();
+
 
         if (saveFTPBool) {
             context = new DefaultCamelContext();
