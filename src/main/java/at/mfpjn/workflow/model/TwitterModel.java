@@ -8,8 +8,8 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterModel {
 
-	private String consumerKey;
-	private String consumerSecret;
+	public final static String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
+	public final static String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
 	private String accessToken;
 	private String accessTokenSecret;	
 
@@ -21,16 +21,8 @@ public class TwitterModel {
 		return consumerKey;
 	}
 
-	public void setConsumerKey(String consumerKey) {
-		this.consumerKey = consumerKey;
-	}
-
 	public String getConsumerSecret() {
 		return consumerSecret;
-	}
-
-	public void setConsumerSecret(String consumerSecret) {
-		this.consumerSecret = consumerSecret;
 	}
 
 	public String getAccessToken() {
