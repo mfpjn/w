@@ -79,22 +79,20 @@ public class TwitterSenderRouteBuilder extends RouteBuilder {
 	}
 
 	@Override
-	public void configure() throws Exception {		 
+	public void configure() throws Exception {
 		sendTweet();
 	}
 
 	public void sendTweet() {
-		String endpoint = "twitter://timeline/user?" + "consumerKey=" + consumerKey + "&consumerSecret="
-				+ consumerSecret + "&accessToken=" + accessToken
-				+ "&accessTokenSecret=" + accessTokenSecret + "&user=" + user;
+		String endpoint = "twitter://timeline/user?" + "consumerKey="
+				+ consumerKey + "&consumerSecret=" + consumerSecret
+				+ "&accessToken=" + accessToken + "&accessTokenSecret="
+				+ accessTokenSecret + "&user=" + user;
 
-		from("direct:twitterq")
-		  .setHeader("CamelTwitterKeywords", header("bar")).choice()
-			.when(body().regex(".{1,120}"))
-			.transform(body().append(" sent via Schick-It!"))
-			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
-			.endChoice()
-			.otherwise().transform(body())
-			.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
+		from("direct:twitterq").choice().when(body().regex(".{1,120}"))
+				.transform(body().append(" sent via Schick-It!"))
+				.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint)
+				.endChoice().otherwise().transform(body())
+				.log(LoggingLevel.INFO, "Tweeting: " + body()).to(endpoint);
 	}
 }
