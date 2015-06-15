@@ -18,15 +18,13 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import at.mfpjn.workflow.model.Customer;
+import at.mfpjn.workflow.model.TwitterModel;
 import at.mfpjn.workflow.model.UserMediaChannelsParameters;
 import at.mfpjn.workflow.service.CustomerService;
 import at.mfpjn.workflow.service.UserMediaChannelsParametersService;
 
 @Controller
 public class HomeController {
-
-	private final String consumerKey = "XhLtFqzkvisnh5vQpU3zdlK7P";
-	private final String consumerSecret = "CBZXM3UjL1Tb6Z6A7ot7vy4SWX3JnLS8mHzfqhwhEadcEGbnK4";
 	private Twitter twitter;
 	private RequestToken requestToken;
 	
@@ -48,38 +46,15 @@ public class HomeController {
 
 	@RequestMapping(value = "/updateTwitterForm")
 	public String updateTwitterForm() throws Exception {
+		Customer currentCustomer = loggedInCustomer();
+		if (null == currentCustomer)
+			return "login";
+		
 		twitter = new TwitterFactory().getInstance();
-		twitter.setOAuthConsumer(consumerKey, consumerSecret);
+		twitter.setOAuthConsumer(TwitterModel.consumerKey, TwitterModel.consumerSecret);
 		requestToken = twitter.getOAuthRequestToken();
 		java.awt.Desktop.getDesktop().browse(
 				new URI(requestToken.getAuthorizationURL()));
-
-		// // Ask for user pin
-		// BufferedReader br = new BufferedReader(new
-		// InputStreamReader(System.in));
-		// while (null == accessToken) {
-		// System.out
-		// .println("Open the following URL and grant access to your account:");
-		// System.out.println(requestToken.getAuthorizationURL());
-		// System.out
-		// .print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
-		// String pin = br.readLine();
-		// try {
-		// if (pin.length() > 0) {
-		// accessToken = twitter
-		// .getOAuthAccessToken(requestToken, pin);
-		// } else {
-		// accessToken = twitter.getOAuthAccessToken();
-		// }
-		// } catch (TwitterException te) {
-		// if (401 == te.getStatusCode()) {
-		// System.out.println("Unable to get the access token.");
-		// } else {
-		// te.printStackTrace();
-		// }
-		// }
-		// }
-		// storeAccessToken(twitter.verifyCredentials().getId(), accessToken);
 
 		return "updateTwitterForm";
 	}
@@ -129,6 +104,7 @@ public class HomeController {
 		// Clean DB from previous Twitter accounts of the user
 		userMediaChannelsParametersService.deleteTwitterParameters(currentCustomer.getId());
 		
+		// Insert new Twitter account information
 		userMediaChannelsParametersService.insertParameter(userMediaChannelsParameters);
 	}
 	
