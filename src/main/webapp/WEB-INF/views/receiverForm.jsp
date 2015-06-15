@@ -44,19 +44,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="grid-20 tece">
+            <div class="grid-25 tece">
                 <input id="saveLocal" name="saveLocal" type="checkbox" value="y"/> Save to Local File
             </div>
-            <div id="pushFTP" class="grid-20 tece" style="visibility: hidden;">
+            <div id="pushFTP" class="grid-25 tece" style="visibility: hidden;">
                 <input name="saveFTP" type="checkbox" value="y"/> Save to FTP
             </div>
-            <div class="grid-20 tece">
+            <div class="grid-25 tece">
                 <input name="saveCSV" type="checkbox" value="y"/> Save to CSV
             </div>
-            <div class="grid-20 tece">
-                <input name="saveDB" type="checkbox" value="y"/> Save to Database
-            </div>
-            <div class="grid-20 tece">
+            <div class="grid-25 tece">
                 <input name="saveSchickit" type="checkbox" value="y"/> Show on SchickIT
             </div>
         </div>

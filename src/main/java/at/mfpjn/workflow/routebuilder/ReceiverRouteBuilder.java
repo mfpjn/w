@@ -119,7 +119,6 @@ public class ReceiverRouteBuilder extends RouteBuilder {
     }
 
     public String listofPosts() {
-        System.out.println("This is the Shit I want= " + postString);
         return postString;
     }
 }
